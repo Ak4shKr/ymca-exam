@@ -31,30 +31,19 @@ export const Login = () => {
           title: "Login Success",
           message: "You have been logged in successfully.",
           color: "green",
-          position: "top-right",
-          autoClose: 1500,
         });
         console.log(response.data.token, response.data.user);
         setToken(response.data.token);
         setUser(response.data.user);
 
         navigate("/"); // Navigate to home page smoothly
-      } else {
-        notifications.show({
-          title: "Login Failed",
-          color: "red",
-          position: "top-right",
-          autoClose: 1500,
-        });
       }
     } catch (error) {
       console.error(error);
       notifications.show({
         title: "Login Error",
-        message: error.message,
+        message: error.response.data.error || "Something went wrong",
         color: "red",
-        position: "top-right",
-        autoClose: 1500,
       });
     } finally {
       setLoading(false);

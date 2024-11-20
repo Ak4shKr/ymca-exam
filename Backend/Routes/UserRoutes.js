@@ -1,17 +1,5 @@
 import express from "express";
-import {
-  addProfessor,
-  allBooking,
-  BookedSlots,
-  bookingByProfessor,
-  bookRoom,
-  getAvailableRoomsByDate,
-  Login,
-  Register,
-  removeProfessor,
-  reportFeedback,
-  verifyOTP,
-} from "../Controllers/UserController.js";
+
 import {
   createRoom,
   createTest,
@@ -23,7 +11,22 @@ import {
   updateProfessor,
 } from "../Controllers/AdminController.js";
 
-import { authToken } from "../middleware/authToken.js";
+import {
+  addProfessor,
+  allBooking,
+  BookedSlots,
+  bookingByProfessor,
+  bookRoom,
+  getAvailableRoomsByDate,
+  removeProfessor,
+} from "../Controllers/UserController/bookingController.js";
+
+import {
+  Login,
+  Register,
+  verifyOTP,
+} from "../Controllers/UserController/authController.js";
+import { reportFeedback } from "../Controllers/UserController/otherController.js";
 const router = express.Router();
 
 //authentication routes
@@ -35,8 +38,8 @@ router.post("/login", Login);
 router.get("/all-professor", getAllProfessors);
 router.post("/update-professor", updateProfessor);
 router.post("/create-room", createRoom);
-router.post("/delete-room", deleteRoom);
-router.get("all-rooms", getAllRooms);
+router.delete("/delete-room", deleteRoom);
+router.get("/all-rooms", getAllRooms);
 router.post("/create-test", createTest);
 router.get("/get-tests/:id", getTests);
 router.delete("/delete-test/:id", deleteTest);

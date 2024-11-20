@@ -23,7 +23,11 @@ const bookingSchema = new Schema({
     type: Date,
     required: true,
   },
-  timeSlot: {
+  seats: {
+    type: Number,
+    required: true,
+  },
+  slot: {
     type: String,
     enum: ["1", "2"],
     required: true,

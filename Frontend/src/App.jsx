@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ProtectedRoutes } from "./components/routes/ProtectedRoutes";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
-import { Home } from "./pages/Home";
+import { Booking } from "./pages/Booking";
 import { CardAllBooking } from "./components/card/CardAllBooking";
 import { CardYourBooking } from "./components/card/CardYourBooking";
 import Hero from "./pages/Hero";
@@ -25,7 +25,7 @@ const App = () => {
             path="/book-exam"
             element={
               <ProtectedRoutes>
-                <Home />
+                <Booking />
               </ProtectedRoutes>
             }
           />

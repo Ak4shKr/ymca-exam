@@ -33,6 +33,16 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
 
+    if (!name || !email || !password || !gender) {
+      notifications.show({
+        title: "Registration Error",
+        message: "All fields are required.",
+        color: "red",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await service.post("/register", {
         name,

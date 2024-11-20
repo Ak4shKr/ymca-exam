@@ -1,4 +1,5 @@
 import DateModel from "../Models/DateModel.js";
+import Room from "../Models/RoomModel.js";
 import User from "../Models/UserModel.js";
 
 export const createTest = async (req, res) => {
@@ -62,9 +63,14 @@ export const createRoom = async (req, res) => {
     if (room) {
       return res.status(400).json({ error: "Room already exists" });
     }
-    const newRoom = new Room({ number, capacity });
+
+    const newRoom = new Room({
+      number: number,
+      totalSeats: capacity,
+      availableSeats: capacity,
+    });
     await newRoom.save();
-    res.status(200).json({ message: "Room created successfully" });
+    res.status(200).json({ newRoom, message: "Room created successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
