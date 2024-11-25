@@ -42,6 +42,7 @@ export const bookRoom = async (req, res) => {
     }
 
     // Validate rooms and seat availability
+    const roomDetails = [];
     for (const roomData of rooms) {
       const room = await Room.findById(roomData.room); // Fetch room by ID
       if (!room) {
@@ -79,6 +80,11 @@ export const bookRoom = async (req, res) => {
       }
 
       await room.save(); // Save updated room data
+      roomDetails.push({
+        room: room._id,
+        roomNumber: room.number, // Adding the room number here
+        seatsBooked: roomData.seats,
+      });
     }
 
     // Create a new booking entry for the date and slot
@@ -86,11 +92,7 @@ export const bookRoom = async (req, res) => {
       semester,
       branch,
       subject,
-      rooms: rooms.map((roomData) => ({
-        room: roomData.room,
-        roomNumber: roomData.roomNumber,
-        seatsBooked: roomData.seats,
-      })),
+      rooms: roomDetails,
       date,
       slot,
       professor: [
@@ -303,8 +305,9 @@ export const BookedSlots = async (req, res) => {
 
 export const bookingByProfessor = async (req, res) => {
   try {
-    const { professorId } = req.body;
-
+    const { professorId } = req.params;
+    const professor = await User.findById(professorId);
+    console.log(professor);
     if (!professorId) {
       return res.status(400).json({ error: "Professor ID is required" });
     }
