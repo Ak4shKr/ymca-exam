@@ -125,6 +125,27 @@ export const getAvailableRoomsByDate = async (req, res) => {
     const [year, month, day] = date.split("-");
     const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
 
+    //find slot1booking if , on particular date, branch and semester
+    const slot1Booking = await Booking.find({
+      date: bookingDate,
+      slot: "1",
+      branch,
+      semester,
+    });
+
+    const slot2Booking = await Booking.find({
+      date: bookingDate,
+      slot: "2",
+      branch,
+      semester,
+    });
+
+    if (slot1Booking.length > 0 && slot2Booking.length > 0) {
+      return res
+        .status(400)
+        .json({ error: "Already book for both slots, try for another date" });
+    }
+
     // Fetch all rooms
     const allRooms = await Room.find();
 
@@ -161,6 +182,16 @@ export const getAvailableRoomsByDate = async (req, res) => {
         slots,
       };
     });
+
+    if (slot1Booking.length > 0) {
+      availableRooms.forEach((room) => {
+        room.slots = room.slots.filter((slot) => slot.slot !== "1");
+      });
+    } else if (slot2Booking.length > 0) {
+      availableRooms.forEach((room) => {
+        room.slots = room.slots.filter((slot) => slot.slot !== "2");
+      });
+    }
 
     // Respond with the data
     res.status(200).json({
