@@ -1,57 +1,5 @@
-import DateModel from "../Models/DateModel.js";
-import Room from "../Models/RoomModel.js";
-import User from "../Models/UserModel.js";
-
-export const createTest = async (req, res) => {
-  try {
-    const { exam, dates } = req.body;
-    if (!exam || !dates) {
-      return res.status(400).json({ message: "Please fill all the fields" });
-    }
-    // Format the dates to yyyy-mm-dd
-    const formattedDates = dates.map((date) => {
-      const d = new Date(date);
-      return d.toISOString().split("T")[0];
-    });
-
-    const newTest = new DateModel({
-      exam,
-      dates: formattedDates,
-    });
-    await newTest.save();
-    res.status(201).json({ newTest, message: "Test created successfully" });
-  } catch (error) {
-    res.status(409).json({ message: error.message });
-  }
-};
-
-export const getTests = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const test = await DateModel.findById(id);
-    if (!test) {
-      return res.status(404).json({ message: "Test not found" });
-    }
-    // const dates = test.dates;
-    res.status(200).json({ test });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-export const deleteTest = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const test = await DateModel.findById(id);
-    if (!test) {
-      return res.status(404).json({ message: "Test not found" });
-    }
-    await DateModel.findByIdAndDelete(id);
-    res.status(200).json({ message: "Test deleted successfully" });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
+import Room from "../../Models/RoomModel.js";
+import User from "../../Models/UserModel.js";
 
 export const createRoom = async (req, res) => {
   try {
@@ -67,7 +15,6 @@ export const createRoom = async (req, res) => {
     const newRoom = new Room({
       number: number,
       totalSeats: capacity,
-      availableSeats: capacity,
     });
     await newRoom.save();
     res.status(200).json({ newRoom, message: "Room created successfully" });

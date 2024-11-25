@@ -1,6 +1,6 @@
-// write middleware to check if the token is valid
 import jwt from "jsonwebtoken";
 
+//middleware to check if the token is valid
 export const authToken = (req, res, next) => {
   const token = req.header("Authorization");
   if (token) {

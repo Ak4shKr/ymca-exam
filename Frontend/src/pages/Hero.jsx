@@ -123,7 +123,7 @@ const Hero = () => {
     <Layout>
       <div>
         {/* section1 */}
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between min-h-screen p-4 bg-dark">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between min-h-screen">
           {/* Text Content */}
           <div className="w-full md:w-[60%] text-white text-center md:text-left mb-8 md:mb-0 md:mx-auto">
             <h1 className="font-exo font-bold text-4xl mb-4">
@@ -213,6 +213,7 @@ const Hero = () => {
               {features.map((feature, index) => (
                 <Card
                   key={index}
+                  whileHover={{ scale: 1.05 }}
                   shadow="sm"
                   radius="md"
                   withBorder
@@ -355,7 +356,7 @@ const Hero = () => {
                   color="indigo"
                   className="w-full mt-8 py-1 text-md font-semibold hover:bg-indigo-700 transition duration-300"
                 >
-                  Submit
+                  Report
                 </Button>
               </form>
             </div>

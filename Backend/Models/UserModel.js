@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Define the User schema
+// User schema for authenticate professor
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,

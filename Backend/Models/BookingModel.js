@@ -1,12 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-// Booking Schema
-const bookingSchema = new Schema({
+const BookingSchema = new mongoose.Schema({
   semester: {
-    type: String,
-    required: true,
-  },
-  branch: {
     type: String,
     required: true,
   },
@@ -14,17 +9,12 @@ const bookingSchema = new Schema({
     type: String,
     required: true,
   },
-  room: {
-    type: Schema.Types.ObjectId,
-    ref: "Room",
+  branch: {
+    type: String,
     required: true,
   },
   date: {
     type: Date,
-    required: true,
-  },
-  seats: {
-    type: Number,
     required: true,
   },
   slot: {
@@ -32,11 +22,28 @@ const bookingSchema = new Schema({
     enum: ["1", "2"],
     required: true,
   },
+  rooms: [
+    {
+      room: {
+        type: mongoose.Schema.Types.ObjectId, // Ensure it's an ObjectId if referencing Room model
+        ref: "Room",
+        required: true,
+      },
+      roomNumber: {
+        type: String,
+        required: true,
+      },
+      seatsBooked: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
   professor: [
     {
       professorId: {
-        type: Schema.Types.ObjectId, // Ensure it's an ObjectId if referencing User model
-        ref: "User", // If this references a User model
+        type: mongoose.Schema.Types.ObjectId, // Ensure it's an ObjectId if referencing User model
+        ref: "User",
         required: true,
       },
       professorName: {
@@ -47,5 +54,5 @@ const bookingSchema = new Schema({
   ],
 });
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const Booking = mongoose.model("Booking", BookingSchema);
 export default Booking;

@@ -95,7 +95,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="sidebar flex flex-col justify-between bg-[#1f1f20] text-gray-200 py-2 pl-4 border-r border-white/40">
+    <div className="sidebar flex flex-col justify-between  py-2 pl-4 border-r border-gray-500">
       {/* Top Section */}
       <div>
         {/* Logo Section */}

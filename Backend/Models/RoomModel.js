@@ -1,26 +1,29 @@
 import mongoose from "mongoose";
-import { type } from "os";
 
 const RoomSchema = new mongoose.Schema({
   number: {
     type: String,
     required: true,
+    unique: true,
   },
   totalSeats: {
     type: Number,
+    required: true,
   },
-  bookedSeats: [
+  booking: [
     {
       date: {
         type: Date,
+        required: true,
       },
       slot: {
         type: String,
         enum: ["1", "2"],
+        required: true,
       },
-      seats: {
+      bookedSeats: {
         type: Number,
-        default: 0,
+        required: true,
       },
     },
   ],

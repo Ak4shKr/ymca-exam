@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserRoutes from "./Routes/UserRoutes.js";
+import AdminRoutes from "./Routes/AdminRoutes.js";
 import { config } from "dotenv";
 config();
 
@@ -20,6 +21,7 @@ app.use(
   })
 );
 
+app.use("/api/admin", AdminRoutes);
 app.use("/api/admin", UserRoutes);
 
 // connnect mongoose

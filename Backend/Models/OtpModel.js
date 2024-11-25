@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//OTP model for temporarily storing otp
 const otpSchema = new mongoose.Schema({
   email: {
     type: String,

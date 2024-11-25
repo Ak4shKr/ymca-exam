@@ -1,23 +1,15 @@
+import mongoose from "mongoose";
 import Booking from "../../Models/BookingModel.js";
 import Room from "../../Models/RoomModel.js";
 import User from "../../Models/UserModel.js";
 
 export const bookRoom = async (req, res) => {
   try {
-    const { semester, branch, subject, room, date, seats, slot, professorId } =
+    const { semester, branch, subject, rooms, date, slot, professorId } =
       req.body;
 
     // Validate required fields
-    if (
-      !semester ||
-      !branch ||
-      !subject ||
-      !room ||
-      !date ||
-      !seats ||
-      !slot ||
-      !professorId
-    ) {
+    if (!semester || !branch || !subject || !rooms || !date || !professorId) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -27,19 +19,13 @@ export const bookRoom = async (req, res) => {
       return res.status(400).json({ error: "Invalid slot provided" });
     }
 
-    // Check if the room exists
-    const roomExists = await Room.findById(room);
-    if (!roomExists) {
-      return res.status(400).json({ error: "Room does not exist" });
-    }
-
     // Check if the professor exists
     const professor = await User.findById(professorId);
     if (!professor) {
       return res.status(400).json({ error: "Professor does not exist" });
     }
 
-    // Check if the professor is available for the date and slot
+    // Check if the professor is already booked for the same date and slot
     const professorAvailable = await Booking.findOne({
       date,
       slot,
@@ -55,42 +41,57 @@ export const bookRoom = async (req, res) => {
       });
     }
 
-    // Check room seat availability for the given date and slot
-    const existingBookingForSlot = roomExists.bookedSeats.find(
-      (booking) =>
-        booking.slot === slot &&
-        new Date(booking.date).toISOString().split("T")[0] ===
-          new Date(date).toISOString().split("T")[0]
-    );
+    // Validate rooms and seat availability
+    for (const roomData of rooms) {
+      const room = await Room.findById(roomData.room); // Fetch room by ID
+      if (!room) {
+        return res
+          .status(400)
+          .json({ error: `Room ${roomData.room} does not exist` });
+      }
 
-    const alreadyBookedSeats = existingBookingForSlot
-      ? existingBookingForSlot.seats
-      : 0;
-    const availableSeats = roomExists.totalSeats - alreadyBookedSeats;
+      const existingBookingForSlot = room.booking.find(
+        (booking) =>
+          booking.slot === slot &&
+          new Date(booking.date).toISOString().split("T")[0] ===
+            new Date(date).toISOString().split("T")[0]
+      );
+      const alreadyBookedSeats = existingBookingForSlot
+        ? existingBookingForSlot.bookedSeats
+        : 0;
+      const availableSeats = room.totalSeats - alreadyBookedSeats;
 
-    if (seats > availableSeats) {
-      return res.status(400).json({
-        error: `Only ${availableSeats} seats are available for Slot ${slot} on this date`,
-      });
+      if (roomData.seats > availableSeats) {
+        return res.status(400).json({
+          error: `Only ${availableSeats} seats are available for Slot ${slot} on this date for room ${room.number}`,
+        });
+      }
+
+      // Update the room's booking with new booking details
+      if (existingBookingForSlot) {
+        existingBookingForSlot.bookedSeats += roomData.seats;
+      } else {
+        room.booking.push({
+          date,
+          slot,
+          bookedSeats: roomData.seats,
+        });
+      }
+
+      await room.save(); // Save updated room data
     }
-
-    // Update the room's booking details for the slot
-    if (existingBookingForSlot) {
-      existingBookingForSlot.seats += seats;
-    } else {
-      roomExists.bookedSeats.push({ date, slot, seats });
-    }
-
-    await roomExists.save();
 
     // Create a new booking entry for the date and slot
     const newBooking = new Booking({
       semester,
       branch,
       subject,
-      room,
+      rooms: rooms.map((roomData) => ({
+        room: roomData.room,
+        roomNumber: roomData.roomNumber,
+        seatsBooked: roomData.seats,
+      })),
       date,
-      seats,
       slot,
       professor: [
         {
@@ -100,11 +101,12 @@ export const bookRoom = async (req, res) => {
       ],
     });
 
+    // Save the new booking
     await newBooking.save();
 
     res
       .status(200)
-      .json({ message: `Room booked successfully for Slot ${slot}` });
+      .json({ message: `Room(s) booked successfully for Slot ${slot}` });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -112,58 +114,137 @@ export const bookRoom = async (req, res) => {
 
 export const getAvailableRoomsByDate = async (req, res) => {
   try {
-    const { date } = req.params;
+    const { date, branch, semester } = req.query;
 
     // Validate date input
     if (!date) {
       return res.status(400).json({ error: "Date is required" });
     }
 
-    // Convert the date string into a proper local date object
+    // Parse the date
     const [year, month, day] = date.split("-");
-    const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Ensure it's treated as UTC to avoid timezone shift
+    const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
 
     // Fetch all rooms
     const allRooms = await Room.find();
 
-    // Calculate available seats per slot
-    const availableRooms = [];
-
-    allRooms.forEach((room) => {
-      // Prepare an object for slots availability
+    // Prepare response data
+    const availableRooms = allRooms.map((room) => {
+      // Initialize slots availability
       const slots = ["1", "2"].map((slot) => {
-        const existingBooking = room.bookedSeats.find(
+        // Find the existing booking for the room, date, and slot
+        const existingBookings = room.booking.filter(
           (booking) =>
             new Date(booking.date).toISOString().split("T")[0] ===
               bookingDate.toISOString().split("T")[0] && booking.slot === slot
         );
 
-        const alreadyBookedSeats = existingBooking ? existingBooking.seats : 0;
-        const availableSeats = room.totalSeats - alreadyBookedSeats;
+        // Calculate the total booked seats for the given slot and date
+        const totalBookedSeats = existingBookings.reduce(
+          (acc, booking) => acc + booking.bookedSeats,
+          0
+        );
 
-        return { slot, availableSeats };
+        // Calculate available seats
+        const availableSeats = room.totalSeats - totalBookedSeats;
+
+        return {
+          slot,
+          availableSeats,
+        };
       });
 
-      // Add each slot to the response
-      slots.forEach((slotInfo) => {
-        availableRooms.push({
-          room: room.number,
-          totalSeats: room.totalSeats,
-          slot: slotInfo.slot,
-          availableSeats: slotInfo.availableSeats,
-        });
-      });
+      // Return room details with availability
+      return {
+        room: room.number,
+        totalSeats: room.totalSeats,
+        slots,
+      };
     });
 
     // Respond with the data
     res.status(200).json({
-      date: bookingDate.toISOString().split("T")[0], // Return date without time info
+      date: bookingDate.toISOString().split("T")[0], // Return date in YYYY-MM-DD format
       availableRooms,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// export const getAvailableRoomsByDate = async (req, res) => {
+//   try {
+//     const { date, semester, branch } = req.query;
+
+//     // Validate inputs
+//     if (!date) {
+//       return res.status(400).json({ error: "Date is required" });
+//     }
+//     if (!semester || !branch) {
+//       return res
+//         .status(400)
+//         .json({ error: "Semester and branch are required" });
+//     }
+
+//     // Convert the date string into a proper local date object
+//     const [year, month, day] = date.split("-");
+//     const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Ensure it's treated as UTC to avoid timezone shift
+
+//     // Fetch all rooms
+//     const allRooms = await Room.find();
+
+//     // Calculate available seats per slot
+//     const availableRooms = [];
+
+//     allRooms.forEach((room) => {
+//       // Prepare an object for slots availability
+//       const slots = ["1", "2"].map((slot) => {
+//         const existingBooking = room.bookedSeats.find(
+//           (booking) =>
+//             new Date(booking.date).toISOString().split("T")[0] ===
+//               bookingDate.toISOString().split("T")[0] && booking.slot === slot
+//         );
+
+//         const isExcluded =
+//           existingBooking &&
+//           existingBooking.semester === semester &&
+//           existingBooking.branch === branch;
+
+//         if (isExcluded) {
+//           return null; // Skip if the booking matches the semester and branch
+//         }
+
+//         const alreadyBookedSeats = existingBooking ? existingBooking.seats : 0;
+//         const availableSeats = room.totalSeats - alreadyBookedSeats;
+
+//         return {
+//           slot,
+//           availableSeats,
+//         };
+//       });
+
+//       // Add each slot to the response if it is valid
+//       slots
+//         .filter((slotInfo) => slotInfo && slotInfo.availableSeats > 0)
+//         .forEach((slotInfo) => {
+//           availableRooms.push({
+//             room: room.number,
+//             totalSeats: room.totalSeats,
+//             slot: slotInfo.slot,
+//             availableSeats: slotInfo.availableSeats,
+//           });
+//         });
+//     });
+
+//     // Respond with the data
+//     res.status(200).json({
+//       date: bookingDate.toISOString().split("T")[0], // Return date without time info
+//       availableRooms,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 export const allBooking = async (req, res) => {
   try {
@@ -208,9 +289,9 @@ export const bookingByProfessor = async (req, res) => {
 
 export const addProfessor = async (req, res) => {
   try {
-    const { professorEmail, bookingId } = req.body;
+    const { professorId, bookingId } = req.body;
 
-    const professor = await User.findOne({ email: professorEmail });
+    const professor = await User.findById(professorId);
     if (!professor) {
       return res.status(400).json({ error: "Professor does not exist" });
     }
