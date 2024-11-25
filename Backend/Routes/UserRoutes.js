@@ -31,7 +31,7 @@ router.get("/booked", BookedSlots);
 router.get("/all-booking", allBooking);
 router.post("/add-professor", addProfessor);
 router.post("/remove-professor", removeProfessor);
-router.get("/booking-professor", bookingByProfessor);
+router.get("/booking-professor/:professorId", bookingByProfessor);
 router.post("/report", reportFeedback);
 
 export default router;
