@@ -104,8 +104,8 @@ const Register = () => {
   };
 
   return (
-    <div className="h-dvh flex justify-center items-center">
-      <div className="w-[95%] md:w-[33%] mx-auto mt-10 p-4 bg-[#282828] rounded-lg shadow-lg">
+    <div className="h-dvh flex justify-center items-center bg-gray-800">
+      <div className="w-[95%] md:w-[33%] mx-auto mt-10 p-4 bg-gradient-to-b from-gray-900 to-gray-800 rounded-lg shadow-lg">
         <h2 className="text-2xl font-exo font-bold mb-2 text-white/80 text-center">
           Register
         </h2>
