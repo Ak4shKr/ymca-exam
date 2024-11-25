@@ -12,6 +12,9 @@ import { Layout } from "../Layout";
 import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "motion/react";
+import service from "../httpd/service.js";
+import { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 const Hero = () => {
   const autoplay = useRef(Autoplay({ delay: 1500 }));
@@ -107,6 +110,47 @@ const Hero = () => {
       review: `"User-friendly and time-saving, perfect for managing complex schedules! "`,
     },
   ];
+
+  //contact us form handling
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleNameChange = (e) => setName(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handleCommentChange = (e) => setComment(e.target.value);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await service.post("/report", {
+        name,
+        email,
+        comment,
+      });
+      console.log(response.data);
+      if (response.status === 200) {
+        notifications.show({
+          title: "Reported",
+          message: "Your feedback has been submitted successfully.",
+          color: "green",
+        });
+        setName("");
+        setEmail("");
+        setComment("");
+      }
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: error.response.data.error || "Something went wrong",
+        color: "red",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const faqItems = faqs.map((item) => (
     <Accordion.Item key={item.value} value={item.value}>
@@ -326,12 +370,17 @@ const Hero = () => {
               {/* <h2 className="text-2xl font-exo font-bold text-white mb-6">
                 Send Us A Message
               </h2> */}
-              <form className="space-y-4 w-[90%] mx-auto">
+              <form
+                className="space-y-4 w-[90%] mx-auto"
+                onSubmit={handleSubmit}
+              >
                 <div className="flex gap-4">
                   <Input.Wrapper label="Name" size="xs" className="w-1/2">
                     <Input
                       size="xs"
                       placeholder="Your Name"
+                      value={name}
+                      onChange={handleNameChange}
                       className="text-white border-1 border-gray-600 focus:ring-indigo-500 rounded-md"
                     />
                   </Input.Wrapper>
@@ -339,6 +388,8 @@ const Hero = () => {
                     <Input
                       size="xs"
                       placeholder="Your Email"
+                      value={email}
+                      onChange={handleEmailChange}
                       className="text-white border-1 border-gray-600 focus:ring-indigo-500 rounded-md"
                     />
                   </Input.Wrapper>
@@ -347,16 +398,20 @@ const Hero = () => {
                   <Textarea
                     size="xs"
                     label="Comments"
+                    value={comment}
+                    onChange={handleCommentChange}
                     placeholder="Write your query.."
                     className="text-white border-1 border-gray-600 focus:ring-indigo-500 rounded-md"
                   />
                 </div>
+
                 <Button
                   variant="filled"
                   color="indigo"
+                  type="submit"
                   className="w-full mt-8 py-1 text-md font-semibold hover:bg-indigo-700 transition duration-300"
                 >
-                  Report
+                  {loading ? "Reporting..." : "Report"}
                 </Button>
               </form>
             </div>

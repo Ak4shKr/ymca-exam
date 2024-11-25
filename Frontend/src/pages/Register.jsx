@@ -152,6 +152,7 @@ const Register = () => {
             label="Gender"
             placeholder="Select your gender"
             value={gender}
+            checkIconPosition="right"
             onChange={handleGenderChange}
             data={[
               { value: "male", label: "Male" },

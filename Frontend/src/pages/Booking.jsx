@@ -1,19 +1,11 @@
 // import { Navbar } from "../components/common/Navbar";
 // import { Sidebar } from "../components/common/Sidebar";
 import { Layout } from "../Layout";
-import {
-  Button,
-  Group,
-  NumberInput,
-  ScrollArea,
-  Select,
-  Table,
-} from "@mantine/core";
+import { Button, NumberInput, ScrollArea, Select, Table } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@mantine/core";
 import { Card, Text, Box, Modal } from "@mantine/core";
-import { color } from "framer-motion";
 
 const availableRooms = [
   {
@@ -63,13 +55,6 @@ const rows = availableRooms.map((availableRooms) => (
 ));
 
 const RoomCard = () => {
-  const [selectedRoom, setSelectedRoom] = useState(null); // State for selected card
-
-  // Handler for card selection
-  const handleSelect = (room) => {
-    setSelectedRoom(room); // Allow only one selection
-  };
-
   return (
     <Box className="flex flex-wrap justify-center items-center gap-4 p-4">
       {availableRooms.map((item) => (
@@ -78,12 +63,7 @@ const RoomCard = () => {
           shadow="sm"
           radius="sm"
           withBorder
-          onClick={() => handleSelect(item.room._id)}
-          className={`cursor-pointer transition-all duration-300 p-2 ${
-            selectedRoom === item.room._id
-              ? "bg-[#32c832] text-white border-violet-700 "
-              : "bg-white text-black hover:bg-teal-200 border-gray-300 border-2"
-          }`}
+          className={`cursor-pointer transition-all duration-300 p-2 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2`}
         >
           <Text className="font-extrabold text-xl text-center">
             {item.room.name}
@@ -97,6 +77,21 @@ const RoomCard = () => {
 
 export const Booking = () => {
   const [value, setValue] = useState();
+  const [formattedDate, setFormattedDate] = useState();
+  const [semester, setSemester] = useState("");
+  const [branch, setBranch] = useState("");
+  const [subject, setSubject] = useState("");
+
+  useEffect(() => {
+    const formatDate = (value) => {
+      const date = new Date(value); // Convert to Date object
+      const year = date.getFullYear(); // Extract year
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Extract month and pad with zero
+      const day = String(date.getDate()).padStart(2, "0"); // Extract day and pad with zero
+      return `${year}-${month}-${day}`; // Return formatted string
+    };
+    setFormattedDate(formatDate(value)); // Set formatted date
+  }, [value]);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
   return (
     <Layout>
@@ -107,6 +102,8 @@ export const Booking = () => {
             label="Select Branch"
             placeholder="Pick branch"
             data={["ECE", "EEIOT", "ENC"]}
+            value={branch}
+            onChange={setBranch}
             checkIconPosition="right"
             comboboxProps={{
               transitionProps: { transition: "pop", duration: 200 },
@@ -119,6 +116,8 @@ export const Booking = () => {
           <Select
             label="Select Semester"
             placeholder="Pick semester"
+            value={semester}
+            onChange={setSemester}
             checkIconPosition="right"
             data={["1", "2", "3", "4", "5", "6", "7", "8"]}
             comboboxProps={{
@@ -143,7 +142,11 @@ export const Booking = () => {
         {/* Subject Input */}
         <div className="w-full md:w-1/2 px-4 mt-4">
           <Input.Wrapper label="Subject" description="" error="">
-            <Input placeholder="Subject Input" />
+            <Input
+              placeholder="Subject Input"
+              value={subject}
+              onChange={setValue}
+            />
           </Input.Wrapper>
         </div>
 
