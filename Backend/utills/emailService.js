@@ -2,11 +2,11 @@ import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   secure: true,
-  host: "smtp.gmail.com",
-  port: 465,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   auth: {
-    user: "akashsahabanaul@gmail.com",
-    pass: "mgirkfmbcugxqfvu",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -15,7 +15,7 @@ export const sendEmail = async ({ email, subject, text }) => {
     // const { email, subject, text } = req.body;
     console.log(email, subject, text);
     await transporter.sendMail({
-      from: "akashsahabanaul@gmail.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: subject,
       text: text,
