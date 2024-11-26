@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Booking from "../../Models/BookingModel.js";
 import Room from "../../Models/RoomModel.js";
 import User from "../../Models/UserModel.js";

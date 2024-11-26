@@ -178,7 +178,6 @@ export const Booking = () => {
           {/* Date Input */}
           <div className="w-full md:w-1/2 px-4 mt-4">
             <DateInput
-              clearable
               value={inputdate}
               onChange={setInputDate}
               label="Choose a Date"

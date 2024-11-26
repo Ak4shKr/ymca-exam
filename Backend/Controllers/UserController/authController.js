@@ -36,7 +36,7 @@ export const Register = async (req, res) => {
       text: `Thank you ${name} for registering on our platform, Your OTP is ${otp} for verify Your Email.`,
     };
     const sendEmailStatus = await sendEmail(emailData);
-    console.log("email status", sendEmailStatus.status);
+    // console.log("email status", sendEmailStatus.status);
     if (sendEmailStatus.status !== 200) {
       return res.status(500).json({ error: "Email sending failed" });
     }
