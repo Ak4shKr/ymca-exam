@@ -381,6 +381,7 @@ const Hero = () => {
                       placeholder="Your Name"
                       value={name}
                       onChange={handleNameChange}
+                      required
                       className="text-white border-1 border-gray-600 focus:ring-indigo-500 rounded-md"
                     />
                   </Input.Wrapper>
@@ -401,6 +402,7 @@ const Hero = () => {
                     value={comment}
                     onChange={handleCommentChange}
                     placeholder="Write your query.."
+                    required
                     className="text-white border-1 border-gray-600 focus:ring-indigo-500 rounded-md"
                   />
                 </div>

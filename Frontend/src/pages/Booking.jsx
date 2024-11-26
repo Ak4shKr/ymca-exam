@@ -1,13 +1,13 @@
-// import { Navbar } from "../components/common/Navbar";
-// import { Sidebar } from "../components/common/Sidebar";
 import { Layout } from "../Layout";
 import { Button, NumberInput, ScrollArea, Select, Table } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
 import { Input } from "@mantine/core";
 import { Card, Text, Box, Modal } from "@mantine/core";
+import service from "../httpd/service";
+import { notifications } from "@mantine/notifications";
 
-const availableRooms = [
+const availableRooms1 = [
   {
     room: { _id: "t1", name: "T1" },
     slot: 1,
@@ -34,7 +34,7 @@ const availableRooms = [
   },
 ];
 
-const rows = availableRooms.map((availableRooms) => (
+const rows = availableRooms1.map((availableRooms) => (
   <Table.Tr key={availableRooms.room._id} ta="center">
     <Table.Td>{availableRooms.room.name}</Table.Td>
     <Table.Td>{availableRooms.slot}</Table.Td>
@@ -54,140 +54,169 @@ const rows = availableRooms.map((availableRooms) => (
   </Table.Tr>
 ));
 
-const RoomCard = () => {
+const RoomCard = ({ availableRooms }) => {
   return (
     <Box className="flex flex-wrap justify-center items-center gap-4 p-4">
-      {availableRooms.map((item) => (
-        <Card
-          key={item.room._id}
-          shadow="sm"
-          radius="sm"
-          withBorder
-          className={`cursor-pointer transition-all duration-300 p-2 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2`}
-        >
-          <Text className="font-extrabold text-xl text-center">
-            {item.room.name}
-          </Text>
-          <Text className="text-xs font-medium">Slot {item.slot}</Text>
-        </Card>
-      ))}
+      {availableRooms.map((item) =>
+        item.slots.map((slot) => (
+          <Card
+            key={`${item.id}`}
+            shadow="sm"
+            radius="sm"
+            withBorder
+            className="cursor-pointer transition-all duration-300 p-2 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2"
+          >
+            {/* Room Name */}
+            <Text className="font-extrabold text-xl text-center mb-1">
+              {item.room}
+            </Text>
+
+            {/* Slot Details */}
+            <Text className="text-sm font-medium text-center text-gray-700">
+              Slot {slot.slot}
+            </Text>
+          </Card>
+        ))
+      )}
     </Box>
   );
 };
 
 export const Booking = () => {
-  const [value, setValue] = useState();
+  const [inputdate, setInputDate] = useState();
   const [formattedDate, setFormattedDate] = useState();
   const [semester, setSemester] = useState("");
   const [branch, setBranch] = useState("");
   const [subject, setSubject] = useState("");
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [isroomdata, setIsRoomdata] = useState(false);
+
+  const handleAvailableRooms = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await service.post("/available-rooms", {
+        date: formattedDate,
+        branch,
+        semester,
+      });
+      console.log(response.data.availableRooms);
+      if (response.status === 200) {
+        notifications.show({
+          title: "Success",
+          message: "AvailableRooms fetched successfully",
+          color: "green",
+        });
+        setAvailableRooms(response.data.availableRooms);
+        setIsRoomdata(true);
+      }
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: "Error",
+        message: error.response.data.error || "Something went wrong",
+        color: "red",
+      });
+    }
+  };
 
   useEffect(() => {
-    const formatDate = (value) => {
-      const date = new Date(value); // Convert to Date object
+    const formatDate = (inputdate) => {
+      const date = new Date(inputdate); // Convert to Date object
       const year = date.getFullYear(); // Extract year
       const month = String(date.getMonth() + 1).padStart(2, "0"); // Extract month and pad with zero
       const day = String(date.getDate()).padStart(2, "0"); // Extract day and pad with zero
       return `${year}-${month}-${day}`; // Return formatted string
     };
-    setFormattedDate(formatDate(value)); // Set formatted date
-  }, [value]);
+    setFormattedDate(formatDate(inputdate)); // Set formatted date
+  }, [inputdate]);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
   return (
     <Layout>
-      <div className="flex flex-wrap mx-auto mt-4 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
-        {/* Select Branch */}
-        <div className="w-full md:w-1/2 px-4">
-          <Select
-            label="Select Branch"
-            placeholder="Pick branch"
-            data={["ECE", "EEIOT", "ENC"]}
-            value={branch}
-            onChange={setBranch}
-            checkIconPosition="right"
-            comboboxProps={{
-              transitionProps: { transition: "pop", duration: 200 },
-            }}
-          />
-        </div>
+      <form onSubmit={handleAvailableRooms}>
+        <div className="flex flex-wrap mx-auto mt-4 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
+          {/* Select Branch */}
+          <div className="w-full md:w-1/2 px-4">
+            <Select
+              label="Select Branch"
+              placeholder="Pick branch"
+              data={["ECE", "EEIOT", "ENC"]}
+              value={branch}
+              onChange={setBranch}
+              checkIconPosition="right"
+              comboboxProps={{
+                transitionProps: { transition: "pop", duration: 200 },
+              }}
+            />
+          </div>
 
-        {/* Select Semester */}
-        <div className="w-full md:w-1/2 px-4">
-          <Select
-            label="Select Semester"
-            placeholder="Pick semester"
-            value={semester}
-            onChange={setSemester}
-            checkIconPosition="right"
-            data={["1", "2", "3", "4", "5", "6", "7", "8"]}
-            comboboxProps={{
-              transitionProps: { transition: "pop", duration: 200 },
-            }}
-          />
-        </div>
+          {/* Select Semester */}
+          <div className="w-full md:w-1/2 px-4">
+            <Select
+              label="Select Semester"
+              placeholder="Pick semester"
+              value={semester}
+              onChange={setSemester}
+              checkIconPosition="right"
+              data={["1", "2", "3", "4", "5", "6", "7", "8"]}
+              comboboxProps={{
+                transitionProps: { transition: "pop", duration: 200 },
+              }}
+            />
+          </div>
 
-        {/* Start Booking Button */}
-        {/* <div className="w-full px-2 mt-4">
+          {/* Subject Input */}
+          <div className="w-full md:w-1/2 px-4 mt-4">
+            <Input.Wrapper label="Subject" description="" error="">
+              <Input
+                required
+                placeholder="Subject Input"
+                onChange={(e) => setSubject(e.target.value)}
+              />
+            </Input.Wrapper>
+          </div>
+
+          {/* Date Input */}
+          <div className="w-full md:w-1/2 px-4 mt-4">
+            <DateInput
+              clearable
+              value={inputdate}
+              onChange={setInputDate}
+              label="Choose a Date"
+              placeholder="Exam Date"
+              pointer
+            />
+          </div>
+
+          {/* Check Room Availability Button */}
+
           <Button
             align="center"
             size="xs"
-            variant="gradient"
-            gradient={{ from: "indigo", to: "violet", deg: 107 }}
-            style={{ width: "100%" }}
+            // variant="gradient"
+            // gradient={{ from: "indigo", to: "violet", deg: 107 }}
+            color="#3f4bd1"
+            className="w-full md:w-[50%] mx-auto px-4 mt-4"
+            type="submit"
           >
-            Start Booking
+            Check Room Availability
           </Button>
-        </div> */}
-
-        {/* Subject Input */}
-        <div className="w-full md:w-1/2 px-4 mt-4">
-          <Input.Wrapper label="Subject" description="" error="">
-            <Input
-              placeholder="Subject Input"
-              value={subject}
-              onChange={setValue}
-            />
-          </Input.Wrapper>
         </div>
-
-        {/* Date Input */}
-        <div className="w-full md:w-1/2 px-4 mt-4">
-          <DateInput
-            clearable
-            value={value}
-            onChange={setValue}
-            label="Choose a Date"
-            placeholder="Exam Date"
-            pointer
-          />
+      </form>
+      {isroomdata && (
+        <div className="flex flex-col items-center mt-8 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
+          <RoomCard availableRooms={availableRooms} className="w-[50%]" />
+          <Button
+            align="center"
+            mt="sm"
+            size="xs"
+            color="#3f4bd1"
+            className="w-full md:w-[50%] mx-auto px-4 mt-4"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Start Scheduling Slot
+          </Button>
         </div>
-
-        {/* Check Room Availability Button */}
-
-        <Button
-          align="center"
-          size="xs"
-          // variant="gradient"
-          // gradient={{ from: "indigo", to: "violet", deg: 107 }}
-          color="#3f4bd1"
-          className="w-full md:w-[50%] mx-auto px-4 mt-4"
-        >
-          Check Room Availability
-        </Button>
-      </div>
-      <div className="flex flex-col items-center mt-8 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
-        <RoomCard className="w-[50%]" />
-        <Button
-          align="center"
-          mt="sm"
-          size="xs"
-          color="#3f4bd1"
-          className="w-full md:w-[50%] mx-auto px-4 mt-4"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Start Scheduling Slot
-        </Button>
-      </div>
+      )}
       {isModalOpen && (
         <Modal
           title={
@@ -205,7 +234,6 @@ export const Booking = () => {
           size="auto"
           centered
           scrollAreaComponent={ScrollArea}
-          color="pink"
           mx="auto"
         >
           <Table stickyHeader stickyHeaderOffset={60} horizontalSpacing="lg">

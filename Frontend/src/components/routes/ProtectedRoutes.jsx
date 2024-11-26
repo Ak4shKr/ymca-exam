@@ -13,8 +13,6 @@ export const ProtectedRoutes = ({ children }) => {
         title: "Unauthorized",
         message: "You need to be logged in to access this page.",
         color: "red",
-        position: "top-right",
-        autoClose: 1500,
       });
     }
   }, [getUser]); // Run effect when 'getUser()' value changes
