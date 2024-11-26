@@ -83,7 +83,12 @@ export const CardYourBooking = () => {
                     </Badge>
                   ))}
                 </Stack>
-                <Button color="red" mt="md" size="xs">
+                <Button
+                  color="red"
+                  mt="md"
+                  size="xs"
+                  disabled={data.professor.length < 2}
+                >
                   <Minus size={24} />
                 </Button>
               </Group>
