@@ -25,7 +25,7 @@ router.post("/verify-otp", verifyOTP);
 router.post("/login", Login);
 
 //professor routes
-router.get("/available-rooms", getAvailableRoomsByDate);
+router.post("/available-rooms", getAvailableRoomsByDate);
 router.post("/booking", bookRoom);
 router.get("/booked", BookedSlots);
 router.get("/all-booking", allBooking);

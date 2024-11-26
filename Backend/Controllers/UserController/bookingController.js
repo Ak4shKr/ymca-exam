@@ -116,11 +116,16 @@ export const bookRoom = async (req, res) => {
 
 export const getAvailableRoomsByDate = async (req, res) => {
   try {
-    const { date, branch, semester } = req.query;
-
+    const { date, branch, semester } = req.body;
+    console.log(req.body);
     // Validate date input
     if (!date) {
       return res.status(400).json({ error: "Date is required" });
+    }
+    if (!branch || !semester) {
+      return res
+        .status(400)
+        .json({ error: "Branch and semester are required" });
     }
 
     // Parse the date
@@ -179,6 +184,7 @@ export const getAvailableRoomsByDate = async (req, res) => {
 
       // Return room details with availability
       return {
+        id: room.id,
         room: room.number,
         totalSeats: room.totalSeats,
         slots,
