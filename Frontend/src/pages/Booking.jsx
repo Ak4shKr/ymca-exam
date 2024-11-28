@@ -7,52 +7,22 @@ import { Card, Text, Box, Modal } from "@mantine/core";
 import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 
-const availableRooms1 = [
-  {
-    room: { _id: "t1", name: "T1" },
-    slot: 1,
-    totalSeats: 30,
-    availableSeats: 10,
-  },
-  {
-    room: { _id: "t2", name: "T2" },
-    slot: 2,
-    totalSeats: 25,
-    availableSeats: 15,
-  },
-  {
-    room: { _id: "t3", name: "T3" },
-    slot: 1,
-    totalSeats: 20,
-    availableSeats: 5,
-  },
-  {
-    room: { _id: "t4", name: "T4" },
-    slot: 2,
-    totalSeats: 50,
-    availableSeats: 20,
-  },
-];
+// interface Slot {
+//   slot: string;
+//   availableSeats: number;
+// }
 
-const rows = availableRooms1.map((availableRooms) => (
-  <Table.Tr key={availableRooms.room._id} ta="center">
-    <Table.Td>{availableRooms.room.name}</Table.Td>
-    <Table.Td>{availableRooms.slot}</Table.Td>
-    <Table.Td>{availableRooms.totalSeats}</Table.Td>
-    <Table.Td style={{ color: "green" }}>
-      {availableRooms.availableSeats}
-    </Table.Td>
-    <Table.Td>
-      <NumberInput
-        placeholder="No of Seats"
-        clampBehavior="strict"
-        min={1}
-        max={availableRooms.availableSeats}
-        style={{ width: "8rem" }}
-      />
-    </Table.Td>
-  </Table.Tr>
-));
+// interface Room {
+//   id: string;
+//   room: string;
+//   totalSeats: number;
+//   slots: Slot[];
+// }
+
+// interface BookingRoom {
+//   room: string;
+//   seats: number;
+// }
 
 const RoomCard = ({ availableRooms }) => {
   return (
@@ -60,18 +30,15 @@ const RoomCard = ({ availableRooms }) => {
       {availableRooms.map((item) =>
         item.slots.map((slot) => (
           <Card
-            key={`${item.id}`}
+            key={`${item.id}-${slot.slot}`}
             shadow="sm"
             radius="sm"
             withBorder
             className="cursor-pointer transition-all duration-300 p-2 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2"
           >
-            {/* Room Name */}
             <Text className="font-extrabold text-xl text-center mb-1">
               {item.room}
             </Text>
-
-            {/* Slot Details */}
             <Text className="text-sm font-medium text-center text-gray-700">
               Slot {slot.slot}
             </Text>
@@ -83,13 +50,30 @@ const RoomCard = ({ availableRooms }) => {
 };
 
 export const Booking = () => {
-  const [inputdate, setInputDate] = useState();
-  const [formattedDate, setFormattedDate] = useState();
+  const [inputdate, setInputDate] = useState("");
+  const [formattedDate, setFormattedDate] = useState("");
   const [semester, setSemester] = useState("");
   const [branch, setBranch] = useState("");
   const [subject, setSubject] = useState("");
   const [availableRooms, setAvailableRooms] = useState([]);
   const [isroomdata, setIsRoomdata] = useState(false);
+  const [activeTab, setActiveTab] = useState("slot1");
+  const [slot, setSlot] = useState("1");
+  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRooms, setSelectedRooms] = useState([]);
+
+  useEffect(() => {
+    const filtered = availableRooms
+      .map((room) => ({
+        ...room,
+        slots: room.slots.filter((s) => s.slot === slot),
+      }))
+      .filter((room) => room.slots.length > 0);
+    setFilteredRooms(filtered);
+    setSelectedRooms([]); // Clear selected rooms when changing slots
+    console.log("Filtered Rooms:", filtered);
+  }, [slot, availableRooms]);
 
   const handleAvailableRooms = async (e) => {
     e.preventDefault();
@@ -99,7 +83,10 @@ export const Booking = () => {
         branch,
         semester,
       });
-      console.log(response.data.availableRooms);
+      console.log(
+        "Available Rooms API Response:",
+        response.data.availableRooms
+      );
       if (response.status === 200) {
         notifications.show({
           title: "Success",
@@ -113,86 +100,142 @@ export const Booking = () => {
       console.error(error);
       notifications.show({
         title: "Error",
-        message: error.response.data.error || "Something went wrong",
+        message: error.response?.data?.error || "Something went wrong",
         color: "red",
       });
     }
   };
 
-  useEffect(() => {
-    const formatDate = (inputdate) => {
-      const date = new Date(inputdate); // Convert to Date object
-      const year = date.getFullYear(); // Extract year
-      const month = String(date.getMonth() + 1).padStart(2, "0"); // Extract month and pad with zero
-      const day = String(date.getDate()).padStart(2, "0"); // Extract day and pad with zero
-      return `${year}-${month}-${day}`; // Return formatted string
+  const handleBooking = async () => {
+    const user = localStorage.getItem("user");
+    const professorId = user ? JSON.parse(user)._id : null;
+    if (!professorId) {
+      notifications.show({
+        title: "Error",
+        message: "Professor ID not found. Please log in again.",
+        color: "red",
+      });
+      return;
+    }
+
+    const bookingData = {
+      semester,
+      branch,
+      subject,
+      rooms: selectedRooms,
+      date: formattedDate,
+      slot,
+      professorId,
     };
-    setFormattedDate(formatDate(inputdate)); // Set formatted date
+
+    try {
+      const response = await service.post("/booking", bookingData);
+      if (response.status === 200) {
+        notifications.show({
+          title: "Success",
+          message: "Rooms booked successfully",
+          color: "green",
+        });
+        setIsModalOpen(false);
+        setIsRoomdata(false);
+        // Reset form or navigate to a confirmation page
+      }
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: "Error",
+        message: error.response?.data?.error || "Booking failed",
+        color: "red",
+      });
+    }
+  };
+
+  const handleSeatSelection = (roomId, seats) => {
+    setSelectedRooms((prevRooms) => {
+      const existingRoomIndex = prevRooms.findIndex((r) => r.room === roomId);
+      if (existingRoomIndex >= 0) {
+        if (seats === 0) {
+          return prevRooms.filter((r) => r.room !== roomId);
+        }
+        const updatedRooms = [...prevRooms];
+        updatedRooms[existingRoomIndex].seats = seats;
+        return updatedRooms;
+      } else if (seats > 0) {
+        return [...prevRooms, { room: roomId, seats }];
+      }
+      return prevRooms;
+    });
+  };
+
+  useEffect(() => {
+    if (inputdate) {
+      const date = new Date(inputdate);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      setFormattedDate(`${year}-${month}-${day}`);
+    }
   }, [inputdate]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
+
+  useEffect(() => {
+    setIsRoomdata(false);
+  }, [branch, semester, inputdate]);
+
   return (
     <Layout>
       <form onSubmit={handleAvailableRooms}>
         <div className="flex flex-wrap mx-auto mt-4 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
-          {/* Select Branch */}
           <div className="w-full md:w-1/2 px-4">
             <Select
               label="Select Branch"
               placeholder="Pick branch"
               data={["ECE", "EEIOT", "ENC"]}
               value={branch}
-              onChange={setBranch}
+              onChange={(value) => setBranch(value || "")}
               checkIconPosition="right"
+              required
               comboboxProps={{
                 transitionProps: { transition: "pop", duration: 200 },
               }}
             />
           </div>
-
-          {/* Select Semester */}
           <div className="w-full md:w-1/2 px-4">
             <Select
               label="Select Semester"
               placeholder="Pick semester"
               value={semester}
-              onChange={setSemester}
+              onChange={(value) => setSemester(value || "")}
               checkIconPosition="right"
               data={["1", "2", "3", "4", "5", "6", "7", "8"]}
               comboboxProps={{
                 transitionProps: { transition: "pop", duration: 200 },
               }}
+              required
             />
           </div>
-
-          {/* Subject Input */}
           <div className="w-full md:w-1/2 px-4 mt-4">
             <Input.Wrapper label="Subject" description="" error="">
               <Input
                 required
                 placeholder="Subject Input"
+                value={subject}
                 onChange={(e) => setSubject(e.target.value)}
               />
             </Input.Wrapper>
           </div>
-
-          {/* Date Input */}
           <div className="w-full md:w-1/2 px-4 mt-4">
             <DateInput
               value={inputdate}
-              onChange={setInputDate}
+              onChange={(date) => setInputDate(date)}
               label="Choose a Date"
               placeholder="Exam Date"
+              required
               pointer
             />
           </div>
-
-          {/* Check Room Availability Button */}
-
           <Button
             align="center"
             size="xs"
-            // variant="gradient"
-            // gradient={{ from: "indigo", to: "violet", deg: 107 }}
             color="#3f4bd1"
             className="w-full md:w-[50%] mx-auto px-4 mt-4"
             type="submit"
@@ -203,7 +246,7 @@ export const Booking = () => {
       </form>
       {isroomdata && (
         <div className="flex flex-col items-center mt-8 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
-          <RoomCard availableRooms={availableRooms} className="w-[50%]" />
+          <RoomCard availableRooms={availableRooms} />
           <Button
             align="center"
             mt="sm"
@@ -235,6 +278,34 @@ export const Booking = () => {
           scrollAreaComponent={ScrollArea}
           mx="auto"
         >
+          <div className="w-[50%] mx-auto my-2  flex gap-2 text-white mb-2 rounded-lg justify-center">
+            <button
+              className={`px-4 border border-white/30 rounded-md font-medium  ${
+                activeTab === "slot1"
+                  ? "bg-white text-black border-2 border-blue-700"
+                  : ""
+              }`}
+              onClick={() => {
+                setActiveTab("slot1");
+                setSlot("1");
+              }}
+            >
+              SLOT 1
+            </button>
+            <button
+              className={`px-4 border border-white/30 rounded-md font-medium ${
+                activeTab === "slot2"
+                  ? "bg-white text-black border-2 border-blue-700"
+                  : ""
+              }`}
+              onClick={() => {
+                setActiveTab("slot2");
+                setSlot("2");
+              }}
+            >
+              SLOT 2
+            </button>
+          </div>
           <Table stickyHeader stickyHeaderOffset={60} horizontalSpacing="lg">
             <Table.Thead>
               <Table.Tr
@@ -251,7 +322,40 @@ export const Booking = () => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody style={{ fontWeight: "bold", fontSize: "14px" }}>
-              {rows}
+              {filteredRooms.length > 0 ? (
+                filteredRooms.map((room) => (
+                  <Table.Tr key={room.id} ta="center">
+                    <Table.Td>{room.room}</Table.Td>
+                    <Table.Td>{room.slots[0].slot}</Table.Td>
+                    <Table.Td>{room.totalSeats}</Table.Td>
+                    <Table.Td style={{ color: "green" }}>
+                      {room.slots[0].availableSeats}
+                    </Table.Td>
+                    <Table.Td>
+                      <NumberInput
+                        placeholder="No of Seats"
+                        clampBehavior="strict"
+                        min={0}
+                        max={room.slots[0].availableSeats}
+                        style={{ width: "8rem" }}
+                        onChange={(value) =>
+                          handleSeatSelection(room.id, value || 0)
+                        }
+                        value={
+                          selectedRooms.find((r) => r.room === room.id)
+                            ?.seats || 0
+                        }
+                      />
+                    </Table.Td>
+                  </Table.Tr>
+                ))
+              ) : (
+                <Table.Tr>
+                  <Table.Td colSpan={5} style={{ textAlign: "center" }}>
+                    No rooms available for this slot
+                  </Table.Td>
+                </Table.Tr>
+              )}
             </Table.Tbody>
           </Table>
           <div className="flex justify-center">
@@ -260,6 +364,8 @@ export const Booking = () => {
               size="sm"
               color="#3f4bd1"
               className="w-full md:w-[50%] px-4 mt-4 mx-auto"
+              onClick={handleBooking}
+              disabled={selectedRooms.length === 0}
             >
               Confirm Booking
             </Button>

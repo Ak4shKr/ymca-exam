@@ -31,6 +31,7 @@ export const CardAllBooking = () => {
       <SimpleGrid
         cols={{ base: 1, sm: 2, lg: 4 }}
         spacing={{ base: 10, md: "xl" }}
+       
       >
         {responsedata.map((data) => (
           <Card
@@ -48,7 +49,7 @@ export const CardAllBooking = () => {
               <Badge color="cyan">slot: {data.slot}</Badge>
             </Group>
             <Text fw={700} size="xl">
-              {data.subject}
+              {data.subject.toUpperCase()}
             </Text>
 
             <Text size="sm" c="dimmed">
