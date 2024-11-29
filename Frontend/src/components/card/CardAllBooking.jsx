@@ -13,6 +13,7 @@ import service from "../../httpd/service";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../../store/authState";
+import { modals } from "@mantine/modals";
 
 export const CardAllBooking = () => {
   const { getUser } = useAuthStore();
@@ -33,6 +34,20 @@ export const CardAllBooking = () => {
         color: "red",
       });
     }
+  };
+
+  const openConfirm = (bookingId) => {
+    modals.openConfirmModal({
+      title: "Add Booking",
+      centered: true,
+      children: <Text size="sm">Are you sure, want to Add into Room?</Text>,
+      labels: { confirm: "Yes, do", cancel: "No, don't " },
+      confirmProps: { color: "#2bdd66" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => {
+        handleAddProfessor(bookingId);
+      },
+    });
   };
 
   const handleAddProfessor = async (bookingId) => {
@@ -88,6 +103,7 @@ export const CardAllBooking = () => {
             radius="md"
             bg="#0e13144f"
             withBorder
+            className="hover:border-gray-800 "
           >
             <Group justify="space-between" mb={4}>
               <Badge color="cyan">
@@ -127,7 +143,8 @@ export const CardAllBooking = () => {
                 mt="md"
                 size="xs"
                 disabled={data.professor.length > 1}
-                onClick={() => handleAddProfessor(data._id)}
+                // onClick={() => handleAddProfessor(data._id)}
+                onClick={() => openConfirm(data._id)}
               >
                 <Plus size={24} />
               </Button>

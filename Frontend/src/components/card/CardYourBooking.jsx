@@ -13,11 +13,26 @@ import service from "../../httpd/service";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../store/authState";
 import { notifications } from "@mantine/notifications";
+import { modals } from "@mantine/modals";
 
 export const CardYourBooking = () => {
   const [responsedata, setResponsedata] = useState([]);
   const { getUser } = useAuthStore();
   const professorId = getUser()._id;
+
+  const openConfirm = (bookingId) => {
+    modals.openConfirmModal({
+      title: "Cancel Booking",
+      centered: true,
+      children: <Text size="sm">Are you sure, want to left Room?</Text>,
+      labels: { confirm: "Yes, do", cancel: "No, don't " },
+      confirmProps: { color: "#F0185C" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => {
+        handleRemoveProfessor(bookingId);
+      },
+    });
+  };
 
   const handleRemoveProfessor = async (bookingId) => {
     try {
@@ -71,6 +86,7 @@ export const CardYourBooking = () => {
               radius="md"
               bg="#0e13144f"
               withBorder
+              className="hover:border-gray-800 "
             >
               <Group justify="space-between" mb={4}>
                 <Badge color="grape">
@@ -89,7 +105,9 @@ export const CardYourBooking = () => {
               <Text size="sm" c="dimmed">
                 Room:{" "}
                 {data.rooms.map((room, index) => (
-                  <span key={index}>{room.roomNumber + " "}</span>
+                  <span key={index}>
+                    {room.roomNumber + "->" + room.seatsBooked + "  "}
+                  </span>
                 ))}
               </Text>
 
@@ -112,7 +130,8 @@ export const CardYourBooking = () => {
                   mt="md"
                   size="xs"
                   disabled={data.professor.length < 2}
-                  onClick={() => handleRemoveProfessor(data._id)}
+                  // onClick={() => handleRemoveProfessor(data._id)}
+                  onClick={() => openConfirm(data._id)}
                 >
                   <Minus size={24} />
                 </Button>
