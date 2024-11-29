@@ -12,11 +12,35 @@ import { Minus } from "lucide-react";
 import service from "../../httpd/service";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../store/authState";
+import { notifications } from "@mantine/notifications";
 
 export const CardYourBooking = () => {
   const [responsedata, setResponsedata] = useState([]);
   const { getUser } = useAuthStore();
   const professorId = getUser()._id;
+
+  const handleRemoveProfessor = async (bookingId) => {
+    try {
+      const response = await service.post("/remove-professor", {
+        professorId,
+        bookingId,
+      });
+      if (response.status == 200) {
+        notifications.show({
+          title: "Success",
+          message: "Professor removed successfully",
+          color: "green",
+        });
+      }
+      getBooking();
+    } catch (error) {
+      notifications.show({
+        title: "Failed",
+        message: error.response.data.error,
+        color: "red",
+      });
+    }
+  };
 
   const getBooking = async () => {
     try {
@@ -88,6 +112,7 @@ export const CardYourBooking = () => {
                   mt="md"
                   size="xs"
                   disabled={data.professor.length < 2}
+                  onClick={() => handleRemoveProfessor(data._id)}
                 >
                   <Minus size={24} />
                 </Button>

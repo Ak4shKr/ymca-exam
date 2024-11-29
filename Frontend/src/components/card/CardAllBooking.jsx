@@ -11,15 +11,58 @@ import { Layout } from "../../Layout";
 import { Plus } from "lucide-react";
 import service from "../../httpd/service";
 import { useEffect, useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 export const CardAllBooking = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [responsedata, setResponsedata] = useState([]);
   const getBooking = async () => {
     try {
       const response = await service.get("/all-booking");
-      setResponsedata(response.data.bookings);
+      const filteredBookings = response.data.bookings.filter(
+        (booking) =>
+          !booking.professor.some((prof) => prof.professorId === user._id)
+      );
+
+      setResponsedata(filteredBookings);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleAddProfessor = async (bookingId) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user._id) {
+        notifications.show({
+          title: "Error",
+          message: "Please login to continue",
+          color: "red",
+        });
+        return;
+      }
+      const professorId = user._id;
+
+      const response = await service.post("/add-professor", {
+        professorId,
+        bookingId,
+      });
+
+      if (response.status == 200) {
+        notifications.show({
+          title: "Success",
+          message: "Professor added successfully",
+          color: "green",
+        });
+      }
+      getBooking();
+    } catch (error) {
+      console.log(error.response.data.error);
+      notifications.show({
+        title: "Failed",
+        message: error.response.data.error,
+        color: "red",
+      });
     }
   };
 
@@ -31,7 +74,6 @@ export const CardAllBooking = () => {
       <SimpleGrid
         cols={{ base: 1, sm: 2, lg: 4 }}
         spacing={{ base: 10, md: "xl" }}
-       
       >
         {responsedata.map((data) => (
           <Card
@@ -80,6 +122,7 @@ export const CardAllBooking = () => {
                 mt="md"
                 size="xs"
                 disabled={data.professor.length > 1}
+                onClick={() => handleAddProfessor(data._id)}
               >
                 <Plus size={24} />
               </Button>

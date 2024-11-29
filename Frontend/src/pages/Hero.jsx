@@ -344,10 +344,7 @@ const Hero = () => {
             </h1>
           </div>
           <div className="bg-[#141313] p-2 rounded-md shadow-lg">
-            <Accordion
-              transitionDuration={500}
-              className="p-6 md:w-[85%] mx-auto"
-            >
+            <Accordion transitionDuration={500} className="p-8 mx-auto">
               {faqItems}
             </Accordion>
           </div>

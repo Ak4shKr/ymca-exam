@@ -336,6 +336,7 @@ export const addProfessor = async (req, res) => {
     }
 
     const booking = await Booking.findById(bookingId);
+    console.log("booking details", booking);
     if (!booking) {
       return res.status(400).json({ error: "Booking not found" });
     }
@@ -349,7 +350,7 @@ export const addProfessor = async (req, res) => {
     const professorAvailable = await Booking.findOne({
       "professor.professorId": professor._id,
       date: booking.date,
-      timeSlot: booking.timeSlot,
+      slot: booking.slot,
     });
     if (professorAvailable) {
       return res
@@ -371,9 +372,9 @@ export const addProfessor = async (req, res) => {
 
 export const removeProfessor = async (req, res) => {
   try {
-    const { professorEmail, bookingId } = req.body;
+    const { professorId, bookingId } = req.body;
 
-    const professor = await User.findOne({ email: professorEmail });
+    const professor = await User.findById(professorId);
     if (!professor) {
       return res.status(400).json({ error: "Professor does not exist" });
     }
