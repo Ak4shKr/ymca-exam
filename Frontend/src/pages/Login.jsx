@@ -17,6 +17,13 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      notifications.show({
+        title: "All fields required",
+        color: "red",
+      });
+      return;
+    }
     setLoading(true);
 
     // Login logic here
@@ -25,14 +32,12 @@ export const Login = () => {
         email,
         password,
       });
-      console.log(response.status);
       if (response.status === 200) {
         notifications.show({
           title: "Login Success",
           message: "You have been logged in successfully.",
           color: "green",
         });
-        console.log(response.data.token, response.data.user);
         setToken(response.data.token);
         setUser(response.data.user);
 
@@ -58,7 +63,6 @@ export const Login = () => {
         </h2>
         <form onSubmit={handleSubmit}>
           {/* Email Input */}
-
           <Input.Wrapper label="Email">
             <Input
               placeholder="Enter email"
@@ -73,7 +77,7 @@ export const Login = () => {
               }}
             />
           </Input.Wrapper>
-
+          {/* password input */}
           <PasswordInput
             label="Password"
             value={password}
@@ -85,7 +89,6 @@ export const Login = () => {
               },
             }}
           />
-
           {/* Submit Button */}
           <div className="text-center">
             <Button

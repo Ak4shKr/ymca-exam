@@ -18,6 +18,7 @@ import { notifications } from "@mantine/notifications";
 
 const Hero = () => {
   const autoplay = useRef(Autoplay({ delay: 1500 }));
+  //data for features section
   const features = [
     {
       icon: "src/assets/features/calendar.png",
@@ -44,6 +45,7 @@ const Hero = () => {
         "Keep all exam schedules and student data safe with robust encryption and backup support.",
     },
   ];
+  //data for faqs section
   const faqs = [
     {
       emoji: "🔒",
@@ -76,7 +78,7 @@ const Hero = () => {
         "This platform was developed by Akash Kumar, an ECE student, to streamline exam scheduling for educational institutions.",
     },
   ];
-
+  //data for testimonial section
   const Testimonials = [
     {
       id: 1,
@@ -116,21 +118,22 @@ const Hero = () => {
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleNameChange = (e) => setName(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleCommentChange = (e) => setComment(e.target.value);
 
+  //handle contactUs form
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = {
+      name,
+      email,
+      comment,
+    };
     try {
       setLoading(true);
-      const response = await service.post("/report", {
-        name,
-        email,
-        comment,
-      });
-      console.log(response.data);
+      const response = await service.post("/report", formData);
+      // console.log(response.data);
       if (response.status === 200) {
         notifications.show({
           title: "Reported",
@@ -152,6 +155,7 @@ const Hero = () => {
     }
   };
 
+  //faq data handling
   const faqItems = faqs.map((item) => (
     <Accordion.Item key={item.value} value={item.value}>
       <Accordion.Control icon={item.emoji} className="text-white">
@@ -169,18 +173,14 @@ const Hero = () => {
         {/* section1 */}
         <div className="flex flex-col-reverse md:flex-row items-center justify-between min-h-screen">
           {/* Text Content */}
-          <div className="w-full md:w-[60%] text-white text-center md:text-left mb-8 md:mb-0 md:mx-auto">
+          <div className="w-full md:w-[60%] text-white text-center md:text-left md:mx-auto">
             <h1 className="font-exo font-bold text-4xl mb-4">
               Hii{" "}
               <motion.span className="text-[#3f8ecf]">Professors,</motion.span>
             </h1>
             <h1 className="font-exo font-bold text-4xl mb-2">
               Let&apos;s schedule Exams on Your{" "}
-              <motion.span
-                // Scale text on hover
-
-                className="text-violet-600"
-              >
+              <motion.span className="text-violet-600">
                 Availability.
               </motion.span>
             </h1>
@@ -236,7 +236,6 @@ const Hero = () => {
 
         {/* section2 */}
         <div className="py-12 px-4 md:px-8 bg-dark text-white">
-          {/* Section Heading */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-exo font-bold text-white">
               Why Choose Us
@@ -286,7 +285,7 @@ const Hero = () => {
         </div>
 
         {/* section3 */}
-        <div className="py-12 px-4 mt-12">
+        <div className="py-12 mt-12">
           {/* Section Title */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-exo font-bold text-white">
@@ -336,8 +335,7 @@ const Hero = () => {
         </div>
 
         {/* section4 */}
-
-        <div className="w-[80%] mx-auto mt-16">
+        <div className="w-[80%] mt-16 mx-auto py-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-exo font-bold text-white">
               Frequently Asked Questions

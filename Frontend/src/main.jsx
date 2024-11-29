@@ -7,8 +7,8 @@ import "@mantine/carousel/styles.css";
 import "@mantine/modals";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import "./index.css";
 import { ModalsProvider } from "@mantine/modals";
+import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>

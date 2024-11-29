@@ -1,14 +1,13 @@
 import {
   House,
   LogOut,
-  CircleUserRound,
   BookmarkPlus,
   List,
   ClipboardList,
   ArrowLeftRight,
 } from "lucide-react";
-import { useState } from "react"; // Import the useState hook from React
-import { useLocation, useNavigate } from "react-router-dom"; // Import from react-router-dom for route handling
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { modals } from "@mantine/modals";
 import { Text, Tooltip } from "@mantine/core";
 
@@ -17,15 +16,13 @@ export const Sidebar = () => {
   const navigate = useNavigate(); // Use for programmatic navigation
   const [toggle, setToggle] = useState(false);
 
-  // Function to toggle sidebar visibility (for responsive design)
+  // toggle sidebar
   const handleToggle = () => {
     setToggle(!toggle);
   };
 
   // Function to handle logout, shows the confirmation modal
   const handleLogout = () => {
-    console.log("clciked");
-    // Open the confirmation modal
     openLogoutModal();
   };
 
@@ -50,17 +47,12 @@ export const Sidebar = () => {
 
   // Function to handle the actual logout action
   const logoutUser = () => {
-    // Clear authentication data (e.g., user session, tokens)
-    localStorage.removeItem("user"); // Adjust as needed
+    localStorage.removeItem("user");
     localStorage.removeItem("token");
-
-    // Optionally, sessionStorage.removeItem('token') if you're using sessionStorage
-
-    // Redirect to the login page or another route
     navigate("/login"); // Redirect to the login page
   };
 
-  // Define the sidebar menu items
+  // sidebar menu items
   const userMenu = [
     {
       name: "Home",
@@ -82,11 +74,6 @@ export const Sidebar = () => {
       path: "/your-booking",
       icon: ClipboardList,
     },
-    // {
-    //   name: "Profile",
-    //   path: "/profile",
-    //   icon: CircleUserRound,
-    // },
     {
       name: "Logout",
       icon: LogOut,
@@ -95,8 +82,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="sidebar flex flex-col justify-between  py-2 pl-4 border-r border-gray-500">
-      {/* Top Section */}
+    <div className="sidebar flex flex-col justify-between py-2 pl-2 border-r border-gray-500">
       <div>
         {/* Logo Section */}
         <div className="sidebar__logo mb-6 mt-2 flex justify-center">
@@ -126,7 +112,7 @@ export const Sidebar = () => {
                   item.action
                     ? (e) => {
                         e.preventDefault();
-                        item.action(); // Call the logout function
+                        item.action(); // Call the logout
                       }
                     : undefined
                 }

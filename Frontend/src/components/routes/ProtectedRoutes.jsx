@@ -5,8 +5,6 @@ import { useEffect } from "react";
 
 export const ProtectedRoutes = ({ children }) => {
   const { getUser } = useAuthStore();
-
-  // Trigger notification only when the user is not logged in
   useEffect(() => {
     if (!getUser()) {
       notifications.show({
@@ -17,9 +15,7 @@ export const ProtectedRoutes = ({ children }) => {
     }
   }, [getUser]); // Run effect when 'getUser()' value changes
 
-  // If user exists, render the children, otherwise redirect to login
   if (getUser()) {
-    // Use getUser() to actually retrieve the user
     return children;
   } else {
     return <Navigate to="/login" replace />;

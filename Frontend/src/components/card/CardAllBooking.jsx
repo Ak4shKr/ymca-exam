@@ -12,9 +12,11 @@ import { Plus } from "lucide-react";
 import service from "../../httpd/service";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { useAuthStore } from "../../store/authState";
 
 export const CardAllBooking = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { getUser } = useAuthStore();
+  const user = getUser();
   const [responsedata, setResponsedata] = useState([]);
   const getBooking = async () => {
     try {
@@ -23,10 +25,13 @@ export const CardAllBooking = () => {
         (booking) =>
           !booking.professor.some((prof) => prof.professorId === user._id)
       );
-
       setResponsedata(filteredBookings);
     } catch (error) {
-      console.log(error);
+      notifications.show({
+        title: "Failed",
+        message: error.response.data.error,
+        color: "red",
+      });
     }
   };
 

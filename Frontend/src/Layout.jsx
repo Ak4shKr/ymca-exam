@@ -12,7 +12,7 @@ export const Layout = ({ children }) => {
         <Navbar />
 
         {/* Scrollable content area */}
-        <div className="flex-grow overflow-y-auto  bg-gradient-to-br from-gray-900 to-gray-800 w-full mx-auto my-auto px-4 py-4">
+        <div className="flex-grow overflow-y-auto bg-gradient-to-br from-gray-900 to-gray-800 w-full mx-auto my-auto px-4 py-4">
           {children}
         </div>
       </div>
