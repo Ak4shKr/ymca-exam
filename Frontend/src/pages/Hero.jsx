@@ -176,11 +176,11 @@ const Hero = () => {
           <div className="w-full md:w-[60%] text-white text-center md:text-left md:mx-auto">
             <h1 className="font-exo font-bold text-4xl mb-4">
               Hii{" "}
-              <motion.span className="text-[#3f8ecf]">Professors,</motion.span>
+              <motion.span className="text-[#09b8ff]">Professors,</motion.span>
             </h1>
             <h1 className="font-exo font-bold text-4xl mb-2">
               Let&apos;s schedule Exams on Your{" "}
-              <motion.span className="text-violet-600">
+              <motion.span className="text-[#7b2eda]">
                 Availability.
               </motion.span>
             </h1>
