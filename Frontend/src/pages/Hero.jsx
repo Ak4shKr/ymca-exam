@@ -180,7 +180,7 @@ const Hero = () => {
             </h1>
             <h1 className="font-exo font-bold text-4xl mb-2">
               Let&apos;s schedule Exams on Your{" "}
-              <motion.span className="text-[#7b2eda]">
+              <motion.span className="text-[#833bdb]">
                 Availability.
               </motion.span>
             </h1>
