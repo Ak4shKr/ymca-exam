@@ -31,7 +31,18 @@ export const Register = async (req, res) => {
     const emailData = {
       email: lowerCaseEmail,
       subject: "OTP Verification",
-      text: `Thank you ${name} for registering on our platform, Your OTP is ${otp} for verify Your Email.`,
+      html: `
+      <div>
+        <h2>Welcome to Our Platform, ${name}!</h2>
+        <p>Thank you for registering on our platform. We are excited to have you with us.</p>
+        <p>Your OTP for email verification is:</p>
+        <h3>${otp}</h3>
+        <p>Please enter this OTP to verify your email address.</p>
+        <p>If you did not request this email, please ignore it.</p>
+        <p>Best regards,</p>
+        <p>xxxx xxxx xxxx</p>
+      </div>
+    `,
     };
     const sendEmailStatus = await sendEmail(emailData);
     // console.log("email status", sendEmailStatus.status);
