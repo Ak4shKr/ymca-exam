@@ -7,8 +7,6 @@ import { generateToken } from "../../utills/generateToken.js";
 export const Register = async (req, res) => {
   try {
     const { name, email, password, gender } = req.body;
-    3;
-    // Check for required fields
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -20,7 +18,7 @@ export const Register = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Generate OTP and save it in the Otp collection
+    // Generate OTP and save it in the Otp collection for 10 minutes
     const otp = otpGenerate();
     const existingOtp = await Otp.findOne({ email: lowerCaseEmail });
     if (existingOtp) {
@@ -93,10 +91,12 @@ export const Login = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res.status(400).json({ error: "User is not verified." });
+      return res
+        .status(400)
+        .json({ error: "User is  un-verified or blocked, contact Admin." });
     }
     if (user.password !== password) {
-      return res.status(400).json({ error: "Invalid credentials" });
+      return res.status(400).json({ error: "Invalid password!" });
     }
 
     const token = generateToken(user._id);

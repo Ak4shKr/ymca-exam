@@ -13,7 +13,7 @@ export const bookRoom = async (req, res) => {
     }
 
     // Validate the slot
-    const validSlots = ["1", "2"]; // Define valid slots (e.g., Slot 1 and Slot 2)
+    const validSlots = ["1", "2"];
     if (!validSlots.includes(slot)) {
       return res.status(400).json({ error: "Invalid slot provided" });
     }
@@ -25,7 +25,7 @@ export const bookRoom = async (req, res) => {
     }
 
     // Check if the professor is already booked for the same date and slot
-    const professorAvailable = await Booking.findOne({
+    const professorBooked = await Booking.findOne({
       date,
       slot,
       professor: {
@@ -34,7 +34,7 @@ export const bookRoom = async (req, res) => {
         },
       },
     });
-    if (professorAvailable) {
+    if (professorBooked) {
       return res.status(400).json({
         error: `Professor is already booked for Slot ${slot} on this date`,
       });
@@ -67,7 +67,7 @@ export const bookRoom = async (req, res) => {
         });
       }
 
-      // Update the room's booking with new booking details
+      //update room with new booking
       if (existingBookingForSlot) {
         existingBookingForSlot.bookedSeats += roomData.seats;
       } else {
@@ -78,10 +78,10 @@ export const bookRoom = async (req, res) => {
         });
       }
 
-      await room.save(); // Save updated room data
+      await room.save();
       roomDetails.push({
         room: room._id,
-        roomNumber: room.number, // Adding the room number here
+        roomNumber: room.number,
         seatsBooked: roomData.seats,
       });
     }
@@ -102,7 +102,6 @@ export const bookRoom = async (req, res) => {
       ],
     });
 
-    // Save the new booking
     await newBooking.save();
 
     res
@@ -116,8 +115,7 @@ export const bookRoom = async (req, res) => {
 export const getAvailableRoomsByDate = async (req, res) => {
   try {
     const { date, branch, semester } = req.body;
-    console.log(req.body);
-    // Validate date input
+
     if (!date) {
       return res.status(400).json({ error: "Date is required" });
     }
@@ -131,7 +129,7 @@ export const getAvailableRoomsByDate = async (req, res) => {
     const [year, month, day] = date.split("-");
     const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
 
-    //find slot1booking if , on particular date, branch and semester
+    //find slot1booking & slot2booking if , on particular date, branch and semester
     const slot1Booking = await Booking.find({
       date: bookingDate,
       slot: "1",
@@ -155,9 +153,7 @@ export const getAvailableRoomsByDate = async (req, res) => {
     // Fetch all rooms
     const allRooms = await Room.find();
 
-    // Prepare response data
     const availableRooms = allRooms.map((room) => {
-      // Initialize slots availability
       const slots = ["1", "2"].map((slot) => {
         // Find the existing booking for the room, date, and slot
         const existingBookings = room.booking.filter(
@@ -171,8 +167,6 @@ export const getAvailableRoomsByDate = async (req, res) => {
           (acc, booking) => acc + booking.bookedSeats,
           0
         );
-
-        // Calculate available seats
         const availableSeats = room.totalSeats - totalBookedSeats;
 
         return {
@@ -200,9 +194,9 @@ export const getAvailableRoomsByDate = async (req, res) => {
       });
     }
 
-    // Respond with the data
+    // Responce data
     res.status(200).json({
-      date: bookingDate.toISOString().split("T")[0], // Return date in YYYY-MM-DD format
+      date: bookingDate.toISOString().split("T")[0],
       availableRooms,
     });
   } catch (error) {
@@ -293,21 +287,6 @@ export const allBooking = async (req, res) => {
   }
 };
 
-export const BookedSlots = async (req, res) => {
-  try {
-    const { branch, semester } = req.query;
-    if (!branch || !semester) {
-      return res
-        .status(400)
-        .json({ error: "Branch and semester are required" });
-    }
-    const bookedSlots = await Booking.find({ branch, semester });
-    res.status(200).json({ bookedSlots });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 export const bookingByProfessor = async (req, res) => {
   try {
     const { professorId } = req.params;
@@ -347,12 +326,12 @@ export const addProfessor = async (req, res) => {
         .json({ error: "Only 2 professors are allowed per booking" });
     }
 
-    const professorAvailable = await Booking.findOne({
+    const professorBooked = await Booking.findOne({
       "professor.professorId": professor._id,
       date: booking.date,
       slot: booking.slot,
     });
-    if (professorAvailable) {
+    if (professorBooked) {
       return res
         .status(400)
         .json({ error: "Professor is already booked for this time slot" });
@@ -407,6 +386,21 @@ export const removeProfessor = async (req, res) => {
 
     await booking.save();
     res.status(200).json({ message: "Professor removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const BookedSlots = async (req, res) => {
+  try {
+    const { branch, semester } = req.query;
+    if (!branch || !semester) {
+      return res
+        .status(400)
+        .json({ error: "Branch and semester are required" });
+    }
+    const bookedSlots = await Booking.find({ branch, semester });
+    res.status(200).json({ bookedSlots });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

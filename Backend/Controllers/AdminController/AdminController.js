@@ -4,7 +4,7 @@ import User from "../../Models/UserModel.js";
 export const createRoom = async (req, res) => {
   try {
     const { number, capacity } = req.body;
-    if (!number) {
+    if (!number || !capacity) {
       return res.status(400).json({ error: "All fields are required" });
     }
     const room = await Room.findOne({ number });
@@ -59,7 +59,7 @@ export const updateProfessor = async (req, res) => {
   try {
     const { professorId, status } = req.body;
     if (!professorId) {
-      return res.status(400).json({ message: "Please provide professorId" });
+      return res.status(400).json({ message: "Please provide professor." });
     }
     const professor = await User.findById(professorId);
     if (!professor) {
