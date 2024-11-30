@@ -77,70 +77,66 @@ export const CardYourBooking = () => {
         cols={{ base: 1, sm: 2, lg: 4 }}
         spacing={{ base: 10, md: "xl" }}
       >
-        {responsedata?.length > 0 ? (
-          responsedata.map((data) => (
-            <Card
-              key={data._id}
-              shadow="sm"
-              padding="lg"
-              radius="md"
-              bg="#0e13144f"
-              withBorder
-              className="hover:border-gray-800 "
-            >
-              <Group justify="space-between" mb={4}>
-                <Badge color="grape">
-                  {data.date.split("T")[0].split("-").reverse().join("-")}
-                </Badge>
-                <Badge color="grape">Slot: {data.slot}</Badge>
-              </Group>
-              <Text fw={700} size="xl">
-                {data.subject.toUpperCase()}
-              </Text>
+        {responsedata.map((data) => (
+          <Card
+            key={data._id}
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            bg="#0e13144f"
+            withBorder
+            className="hover:border-gray-800 "
+          >
+            <Group justify="space-between" mb={4}>
+              <Badge color="grape">
+                {data.date.split("T")[0].split("-").reverse().join("-")}
+              </Badge>
+              <Badge color="grape">Slot: {data.slot}</Badge>
+            </Group>
+            <Text fw={700} size="xl">
+              {data.subject.toUpperCase()}
+            </Text>
 
-              <Text size="sm" c="dimmed">
-                B.Tech {data.branch} Semester {data.semester}
-              </Text>
+            <Text size="sm" c="dimmed">
+              B.Tech {data.branch} Semester {data.semester}
+            </Text>
 
-              <Text size="sm" c="dimmed">
-                Room:{" "}
-                {data.rooms.map((room, index) => (
-                  <span key={index}>
-                    {room.roomNumber + "->" + room.seatsBooked + "  "}
-                  </span>
+            <Text size="sm" c="dimmed">
+              Room:{" "}
+              {data.rooms.map((room, index) => (
+                <span key={index}>
+                  {room.roomNumber + "->" + room.seatsBooked + "  "}
+                </span>
+              ))}
+            </Text>
+
+            <Group justify="space-between">
+              <Stack gap={0}>
+                {data.professor.map((prof, index) => (
+                  <Badge
+                    color="indigo"
+                    mt="xs"
+                    radius="sm"
+                    fw={500}
+                    key={index}
+                  >
+                    {prof.professorName.split(" ")[0]}
+                  </Badge>
                 ))}
-              </Text>
-
-              <Group justify="space-between">
-                <Stack gap={0}>
-                  {data.professor.map((prof, index) => (
-                    <Badge
-                      color="indigo"
-                      mt="xs"
-                      radius="sm"
-                      fw={500}
-                      key={index}
-                    >
-                      {prof.professorName.split(" ")[0]}
-                    </Badge>
-                  ))}
-                </Stack>
-                <Button
-                  color="red"
-                  mt="md"
-                  size="xs"
-                  disabled={data.professor.length < 2}
-                  // onClick={() => handleRemoveProfessor(data._id)}
-                  onClick={() => openConfirm(data._id)}
-                >
-                  <Minus size={24} />
-                </Button>
-              </Group>
-            </Card>
-          ))
-        ) : (
-          <Text>No bookings found</Text>
-        )}
+              </Stack>
+              <Button
+                color="red"
+                mt="md"
+                size="xs"
+                disabled={data.professor.length < 2}
+                // onClick={() => handleRemoveProfessor(data._id)}
+                onClick={() => openConfirm(data._id)}
+              >
+                <Minus size={24} />
+              </Button>
+            </Group>
+          </Card>
+        ))}
       </SimpleGrid>
     </Layout>
   );

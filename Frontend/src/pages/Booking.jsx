@@ -64,6 +64,8 @@ export const Booking = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); //modal for booking table
   const [selectedRooms, setSelectedRooms] = useState([]); //selected room are array of room selected with seats in booking table i.e. BookingRoom
 
+  const [loading, setLoading] = useState(false);
+
   //user state
   const { getUser } = useAuthStore();
   const professorId = getUser()._id;
@@ -71,6 +73,7 @@ export const Booking = () => {
   // available room check api
   const handleAvailableRooms = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await service.post("/available-rooms", {
         date: formattedDate,
@@ -88,6 +91,7 @@ export const Booking = () => {
           color: "green",
         });
         setAvailableRooms(response.data.availableRooms);
+        setLoading(false);
         setIsRoomdata(true);
       }
     } catch (error) {
@@ -97,6 +101,8 @@ export const Booking = () => {
         message: error.response?.data?.error || "Something went wrong",
         color: "red",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,6 +128,7 @@ export const Booking = () => {
     };
 
     try {
+      setLoading(true);
       const response = await service.post("/booking", bookingData);
       if (response.status === 200) {
         notifications.show({
@@ -130,6 +137,7 @@ export const Booking = () => {
           color: "green",
         });
         setIsModalOpen(false);
+        setLoading(false);
         setIsRoomdata(false);
       }
     } catch (error) {
@@ -139,6 +147,8 @@ export const Booking = () => {
         message: error.response?.data?.error || "Booking failed",
         color: "red",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -247,8 +257,9 @@ export const Booking = () => {
             color="#3f4bd1"
             className="w-full md:w-[50%] mx-auto px-4 mt-4"
             type="submit"
+            disabled={loading}
           >
-            Check Room Availability
+            {loading ? "Processing..." : "Check Available Rooms"}
           </Button>
         </div>
       </form>
@@ -287,7 +298,7 @@ export const Booking = () => {
           onClose={() => setIsModalOpen(false)}
           size="auto"
           centered
-          scrollAreaComponent={ScrollArea}
+          scrollAreaComponent={ScrollArea.Autosize}
           mx="auto"
         >
           {/* slots tab */}
@@ -380,9 +391,9 @@ export const Booking = () => {
               color="#3f4bd1"
               className="w-full md:w-[50%] px-4 mt-4 mx-auto"
               onClick={handleBooking}
-              disabled={selectedRooms.length === 0}
+              disabled={selectedRooms.length === 0 || loading}
             >
-              Confirm Booking
+              {loading ? "Processing..." : "Confirm Booking"}
             </Button>
           </div>
         </Modal>
