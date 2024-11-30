@@ -9,13 +9,13 @@ export const Navbar = () => {
   const gender = getUser().gender;
   return (
     <div className="navbar w-full h-[3.5rem] border-b border-white/70 shadow-slate-800 shadow-lg">
-      <div className="flex justify-end gap-6 mr-[1rem] py-3 items-center">
+      <div className="flex justify-end gap-6 mr-[1rem] py-2 items-center">
         {/* Notification bell and profile button */}
         <Tooltip label="Notifications" position="left" color="dark" withArrow>
-          <Bell size={20} color="white" />
+          <Bell size={18} color="white" />
         </Tooltip>
         <Tooltip label="UserName" position="left" color="dark" withArrow>
-          <button className="font-medium  text-white font-exo text-md p-1 px-4 border bg-[#3f4bd1] border-blue-600  rounded-md">
+          <button className="font-medium  text-white font-exo text-md p-[2px] px-4 border bg-[#3f4bd1] border-blue-600  rounded-md">
             {gender == "male" ? (
               <CgBoy className="inline-block mr-2 mb-1 " />
             ) : (

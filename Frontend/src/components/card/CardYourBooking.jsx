@@ -132,7 +132,7 @@ export const CardYourBooking = () => {
                 // onClick={() => handleRemoveProfessor(data._id)}
                 onClick={() => openConfirm(data._id)}
               >
-                <Minus size={24} />
+                <Minus size={20} />
               </Button>
             </Group>
           </Card>

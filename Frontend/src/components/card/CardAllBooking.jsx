@@ -146,7 +146,7 @@ export const CardAllBooking = () => {
                 // onClick={() => handleAddProfessor(data._id)}
                 onClick={() => openConfirm(data._id)}
               >
-                <Plus size={24} />
+                <Plus size={20} />
               </Button>
             </Group>
           </Card>

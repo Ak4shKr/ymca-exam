@@ -157,7 +157,7 @@ const Hero = () => {
 
   //faq data handling
   const faqItems = faqs.map((item) => (
-    <Accordion.Item key={item.value} value={item.value}>
+    <Accordion.Item key={item.value} value={item.value} className="text-sm">
       <Accordion.Control icon={item.emoji} className="text-white">
         {item.value}
       </Accordion.Control>
@@ -174,24 +174,24 @@ const Hero = () => {
         <div className="flex flex-col-reverse md:flex-row items-center justify-between min-h-screen">
           {/* Text Content */}
           <div className="w-full md:w-[60%] text-white text-center md:text-left md:mx-auto">
-            <h1 className="font-exo font-bold text-4xl mb-4">
+            <h1 className="font-exo font-bold text-3xl mb-4">
               Hii{" "}
               <motion.span className="text-[#09b8ff]">Professors,</motion.span>
             </h1>
-            <h1 className="font-exo font-bold text-4xl mb-2">
+            <h1 className="font-exo font-bold text-3xl mb-2">
               Let&apos;s schedule Exams on Your{" "}
               <motion.span className="text-[#833bdb]">
                 Availability.
               </motion.span>
             </h1>
-            <p className="md:w-[80%] mb-6">
+            <p className="md:w-[80%] mb-6 text-sm">
               Simplify the way you manage exams with our intuitive scheduling
               platform, designed to keep you organized and prepared.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button
-                  className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 font-exo text-md px-6"
+                  className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 font-exo px-4"
                   radius="md"
                 >
                   <a href="/book-exam">Get Started</a>
@@ -237,7 +237,7 @@ const Hero = () => {
         {/* section2 */}
         <div className="py-12 px-4 md:px-8 bg-dark text-white">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-exo font-bold text-white">
+            <h1 className="text-3xl font-exo font-semibold text-white">
               Why Choose Us
             </h1>
             <p className="text-gray-300 mt-2">
@@ -262,7 +262,7 @@ const Hero = () => {
                   withBorder
                   className="rounded-lg border border-gray-700 bg-gradient-to-tr from-[#3f4bd1] to-[#5e69e7] hover:scale-105 hover:border-2 hover:border-blue-600  cursor-pointer duration-300 ease-in-out"
                 >
-                  <Card.Section className="flex justify-center items-center py-8 bg-[#2f3136]">
+                  <Card.Section className="flex justify-center items-center py-4 bg-[#2f3136]">
                     <div
                       className="bg-cover bg-center rounded-t-lg"
                       style={{
@@ -272,7 +272,7 @@ const Hero = () => {
                       }}
                     />
                   </Card.Section>
-                  <div className="py-8 text-center">
+                  <div className="py-4 text-center">
                     <h2 className="text-lg font-semibold mb-2">
                       {feature.title}
                     </h2>
@@ -288,7 +288,7 @@ const Hero = () => {
         <div className="py-12 mt-12">
           {/* Section Title */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-exo font-bold text-white">
+            <h1 className="text-3xl font-exo font-semibold text-white">
               Testimonials
             </h1>
           </div>
@@ -297,7 +297,7 @@ const Hero = () => {
           <div className="w-full md:w-[70%] mx-auto">
             <Carousel
               withIndicators
-              height={300}
+              height={270}
               slideSize="50%"
               slideGap="md"
               plugins={[autoplay.current]}
@@ -310,9 +310,9 @@ const Hero = () => {
             >
               {Testimonials.map((testimonial, index) => (
                 <Carousel.Slide key={index} style={{ marginRight: 10 }}>
-                  <div className="bg-[#3c92d8] text-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                  <div className="bg-[#3c92d8] text-white p-4 rounded-lg shadow-lg flex flex-col items-center">
                     {/* Image Section */}
-                    <div className="w-36 h-36 mb-4 flex items-center justify-center overflow-hidden rounded-full border-2 border-violet-600">
+                    <div className="w-32 h-32 mb-2 flex items-center justify-center overflow-hidden rounded-full border-2 border-violet-600">
                       <Image
                         src={testimonial.image} // Replace with actual image paths
                         alt={`Teacher ${index + 1}`}
@@ -337,12 +337,12 @@ const Hero = () => {
         {/* section4 */}
         <div className="w-[80%] mt-16 mx-auto py-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-exo font-bold text-white">
+            <h1 className="text-3xl font-exo font-semibold text-white">
               Frequently Asked Questions
             </h1>
           </div>
           <div className="bg-[#141313] p-2 rounded-md shadow-lg">
-            <Accordion transitionDuration={500} className="p-8 mx-auto">
+            <Accordion transitionDuration={500} className="p-4 mx-auto">
               {faqItems}
             </Accordion>
           </div>
@@ -350,10 +350,10 @@ const Hero = () => {
         {/* section5 */}
         <div className="w-[90%] mx-auto pt-12 mt-16">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-exo font-bold text-white mb-4">
+            <h1 className="text-3xl font-exo font-semibold text-white mb-2">
               Contact Us
             </h1>
-            <p className="text-md font-exo text-white mt-1">
+            <p className="text-sm font-exo text-white mt-1">
               We are honoured to receive your comments and suggestions. Please
               feel free to contact us:
             </p>
@@ -406,6 +406,7 @@ const Hero = () => {
                   variant="filled"
                   color="indigo"
                   type="submit"
+                  size="xs"
                   className="w-full mt-8 py-1 text-md font-semibold hover:bg-indigo-700 transition duration-300"
                 >
                   {loading ? "Reporting..." : "Report"}
@@ -416,12 +417,12 @@ const Hero = () => {
             {/* Right Contact Info */}
             <div className="w-full lg:w-[48%] text-white flex-col items-center justify-center">
               <div className="w-full md:w-[60%] mx-auto space-y-6">
-                <h2 className="text-2xl font-exo font-bold mb-4">
+                <h2 className="text-2xl font-exo font-semibold mb-4">
                   Get In Touch
                 </h2>
                 <div className="space-y-2">
                   <p>
-                    <span className="font-semibold">Email:</span>{" "}
+                    <span className="font-medium">Email:</span>{" "}
                     <a
                       href="mailto:akashsahabanaul@gmail.com"
                       className="text-indigo-400 hover:text-indigo-300"
@@ -430,7 +431,7 @@ const Hero = () => {
                     </a>
                   </p>
                   <p>
-                    <span className="font-semibold">Phone:</span>{" "}
+                    <span className="font-medium">Phone:</span>{" "}
                     <a className="text-indigo-400 hover:text-indigo-300">
                       +91 76670 XXXXX
                     </a>

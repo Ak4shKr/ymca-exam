@@ -82,7 +82,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="sidebar flex flex-col justify-between py-2 pl-2 border-r border-gray-500">
+    <div className="sidebar flex flex-col justify-between py-2 pl-1 border-r border-gray-500">
       <div>
         {/* Logo Section */}
         <div className="sidebar__logo mb-6 mt-2 flex justify-center">
@@ -90,7 +90,7 @@ export const Sidebar = () => {
             <img
               src="/src/assets/logo/ymca_logo.png"
               alt="YMCA Logo"
-              width="50"
+              width="44"
             />
           </a>
         </div>
@@ -116,15 +116,17 @@ export const Sidebar = () => {
                       }
                     : undefined
                 }
-                className={`sidebar__menu-item flex items-center gap-4 py-2 px-5 rounded-l-md text-md font-semibold cursor-pointer transition-colors ${
+                className={`sidebar__menu-item flex items-center gap-3 py-2 px-5 rounded-l-md text-md font-semibold cursor-pointer transition-colors ${
                   location.pathname === item.path
                     ? "bg-[#3f4bd1]"
                     : "hover:bg-[#3f4bd19a]"
                 }`}
               >
-                <item.icon size={24} className="text-white" />
+                <item.icon size={20} className="text-white" />
                 {toggle && (
-                  <span className="text-white/90 truncate">{item.name}</span>
+                  <span className="text-white/90 truncate font-medium">
+                    {item.name}
+                  </span>
                 )}
               </a>
             </Tooltip>
@@ -136,7 +138,7 @@ export const Sidebar = () => {
       <div className="flex justify-end px-4 mb-4">
         <Tooltip label="Toggle Sidebar" withArrow color="dark" position="right">
           <ArrowLeftRight
-            size={24}
+            size={20}
             className="text-gray-200 hover:text-[#3f4bd1] cursor-pointer"
             onClick={handleToggle}
           />

@@ -27,7 +27,7 @@ import { useAuthStore } from "../store/authState";
 
 const RoomCard = ({ availableRooms }) => {
   return (
-    <Box className="flex flex-wrap justify-center items-center gap-4 p-4">
+    <Box className="flex flex-wrap justify-center items-center gap-4 p-2">
       {availableRooms.map((item) =>
         item.slots.map((slot) => (
           <Card
@@ -35,9 +35,9 @@ const RoomCard = ({ availableRooms }) => {
             shadow="sm"
             radius="sm"
             withBorder
-            className="cursor-pointer transition-all duration-300 p-2 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2"
+            className="cursor-pointer transition-all duration-300 p-1 bg-white text-black hover:bg-teal-100 hover:scale-95 border-gray-300 border-2"
           >
-            <Text className="font-extrabold text-xl text-center mb-1">
+            <Text className="font-extrabold text-lg text-center">
               {item.room}
             </Text>
             <Text className="text-sm font-medium text-center text-gray-700">
@@ -206,6 +206,7 @@ export const Booking = () => {
               placeholder="Pick branch"
               data={["ECE", "EEIOT", "ENC"]}
               value={branch}
+              size="xs"
               onChange={(value) => setBranch(value || "")}
               checkIconPosition="right"
               required
@@ -220,6 +221,7 @@ export const Booking = () => {
               label="Select Semester"
               placeholder="Pick semester"
               value={semester}
+              size="xs"
               onChange={(value) => setSemester(value || "")}
               checkIconPosition="right"
               data={["1", "2", "3", "4", "5", "6", "7", "8"]}
@@ -235,6 +237,7 @@ export const Booking = () => {
               <Input
                 required
                 placeholder="Subject Input"
+                size="xs"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
               />
@@ -244,6 +247,7 @@ export const Booking = () => {
           <div className="w-full md:w-1/2 px-4 mt-4">
             <DateInput
               value={inputdate}
+              size="xs"
               onChange={(date) => setInputDate(date)}
               label="Choose a Date"
               placeholder="Exam Date"
@@ -287,7 +291,7 @@ export const Booking = () => {
           title={
             <div
               style={{
-                fontSize: "18px",
+                fontSize: "16px",
                 color: "white",
               }}
             >
@@ -304,7 +308,7 @@ export const Booking = () => {
           {/* slots tab */}
           <div className="w-[50%] mx-auto my-2  flex gap-2 text-white mb-2 rounded-lg justify-center">
             <button
-              className={`px-4 border border-white/30 rounded-md font-medium  ${
+              className={`px-4 border border-white/30 rounded-md text-sm font-medium  ${
                 activeTab === "slot1"
                   ? "bg-white text-black border-2 border-blue-700"
                   : ""
@@ -317,7 +321,7 @@ export const Booking = () => {
               SLOT 1
             </button>
             <button
-              className={`px-4 border border-white/30 rounded-md font-medium ${
+              className={`px-4 border border-white/30 rounded-md text-sm font-medium ${
                 activeTab === "slot2"
                   ? "bg-white text-black border-2 border-blue-700"
                   : ""
@@ -346,7 +350,7 @@ export const Booking = () => {
                 <Table.Th>Book Seat</Table.Th>
               </Table.Tr>
             </Table.Thead>
-            <Table.Tbody style={{ fontWeight: "bold", fontSize: "14px" }}>
+            <Table.Tbody style={{ fontWeight: "bold", fontSize: "12px" }}>
               {filteredRooms.length > 0 ? (
                 filteredRooms.map((room) => (
                   <Table.Tr key={room.id} ta="center">
@@ -387,7 +391,7 @@ export const Booking = () => {
           <div className="flex justify-center">
             <Button
               mt="lg"
-              size="sm"
+              size="xs"
               color="#3f4bd1"
               className="w-full md:w-[50%] px-4 mt-4 mx-auto"
               onClick={handleBooking}
