@@ -1,4 +1,6 @@
+import { configDotenv } from "dotenv";
 import nodemailer from "nodemailer";
+configDotenv();
 
 const transporter = nodemailer.createTransport({
   secure: true,

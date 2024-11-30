@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import UserRoutes from "./Routes/UserRoutes.js";
 import AdminRoutes from "./Routes/AdminRoutes.js";
+import { configDotenv } from "dotenv";
+configDotenv();
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
