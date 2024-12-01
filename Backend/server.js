@@ -12,12 +12,14 @@ const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the server");
+});
+
 app.use(
   cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: "http://localhost:5173", // Frontend URL
+    credentials: true, // Allow cookies if needed
   })
 );
 
