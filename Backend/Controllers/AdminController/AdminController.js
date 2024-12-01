@@ -37,6 +37,24 @@ export const deleteRoom = async (req, res) => {
   }
 };
 
+export const updateRoom = async (req, res) => {
+  try {
+    const { number, capacity } = req.body;
+    if (!number || !capacity) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    const room = await Room.findOne({ number });
+    if (!room) {
+      return res.status(404).json({ error: "Room not found" });
+    }
+    room.totalSeats = capacity;
+    const updatedRoom = await room.save();
+    res.status(200).json({ updatedRoom, message: "Room updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const getAllRooms = async (req, res) => {
   try {
     const rooms = await Room.find();
