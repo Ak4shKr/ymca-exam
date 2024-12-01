@@ -119,14 +119,12 @@ export const Sidebar = () => {
                 className={`sidebar__menu-item flex items-center gap-3 py-2 px-5 rounded-l-md text-md font-semibold cursor-pointer transition-colors ${
                   location.pathname === item.path
                     ? "bg-[#3f4bd1]"
-                    : "hover:bg-[#3f4bd19a]"
+                    : "hover:bg-[#3f4bd16b]"
                 }`}
               >
                 <item.icon size={20} className="text-white" />
                 {toggle && (
-                  <span className="text-white/90 truncate font-medium">
-                    {item.name}
-                  </span>
+                  <span className="text-white/90 truncate ">{item.name}</span>
                 )}
               </a>
             </Tooltip>
