@@ -294,12 +294,12 @@ const Hero = () => {
           </div>
 
           {/* Testimonials Carousel */}
-          <div className="w-full md:w-[90%] lg:w-[70%] mx-auto px-4 md:px-0">
+          <div className="w-full md:w-[70%] mx-auto">
             <Carousel
               withIndicators
-              height={300}
-              slideSize={{ base: "100%", sm: "70%", md: "50%" }}
-              slideGap={{ base: "md", sm: "lg" }}
+              height={270}
+              slideSize="50%"
+              slideGap="md"
               plugins={[autoplay.current]}
               onMouseEnter={autoplay.current.stop}
               onMouseLeave={autoplay.current.reset}
@@ -310,15 +310,18 @@ const Hero = () => {
             >
               {Testimonials.map((testimonial, index) => (
                 <Carousel.Slide key={index} style={{ marginRight: 10 }}>
-                  <div className="bg-[#3c92d8] text-white p-6 rounded-lg shadow-lg flex flex-col items-center mx-2 h-full">
-                    <div className="w-24 h-24 sm:w-32 sm:h-32 mb-4 relative flex items-center justify-center overflow-hidden rounded-full border-2 border-violet-600">
+                  <div className="bg-[#3c92d8] text-white p-4 rounded-lg shadow-lg flex flex-col items-center">
+                    {/* Image Section */}
+                    <div className="w-32 h-32 mb-2 flex items-center justify-center overflow-hidden rounded-full border-2 border-violet-600">
                       <Image
                         src={testimonial.image} // Replace with actual image paths
                         alt={`Teacher ${index + 1}`}
-                        className="object-cover w-full h-full"
+                        layout="fill"
+                        objectFit="cover"
                       />
                     </div>
-                    <h3 className="text-lg font-semibold mb-3">
+                    {/* Text Content Section */}
+                    <h3 className="text-lg font-semibold mb-2">
                       {testimonial.name}
                     </h3>
                     <p className="text-md text-gray-200 text-center">
