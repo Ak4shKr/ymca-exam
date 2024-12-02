@@ -47,7 +47,7 @@ export const CollapseDesktop = ({ children }) => {
 
           <div className="flex items-center">
             <img
-              src="/src/assets/logo/ymca_logo.png"
+              src="/logo/ymca_logo.png"
               alt="YMCA Logo"
               className="h-9 w-auto mr-4"
             />

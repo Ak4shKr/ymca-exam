@@ -21,25 +21,25 @@ const Hero = () => {
   //data for features section
   const features = [
     {
-      icon: "src/assets/features/calendar.png",
+      icon: "/features/calendar.png",
       title: "Effortless Exam Scheduling",
       description:
         "Simplify exam scheduling with an intuitive interface that saves time and reduces manual work.",
     },
     {
-      icon: "src/assets/features/clock.png",
+      icon: "/features/clock.png",
       title: "Conflict-Free Timetables",
       description:
         "Automated conflict detection ensures no overlapping exams or resource clashes.",
     },
     {
-      icon: "src/assets/features/edit.png",
+      icon: "/features/edit.png",
       title: "Customizable Exam Plans",
       description:
         "Tailor exam schedules to specific requirements with easy-to-use customization tools..",
     },
     {
-      icon: "src/assets/features/lock.png",
+      icon: "/features/lock.png",
       title: "Secure Data Management",
       description:
         "Keep all exam schedules and student data safe with robust encryption and backup support.",
@@ -83,32 +83,32 @@ const Hero = () => {
     {
       id: 1,
       name: "Dr. Ananya ",
-      image: "src/assets/prof/teacher1.jpg",
+      image: "/prof/teacher1.jpg",
       review: "Efficient and easy to use, saves hours of scheduling time!",
     },
     {
       id: 2,
       name: "Prof. Rajesh ",
-      image: "src/assets/prof/teacher2.jpg",
+      image: "/prof/teacher2.jpg",
       review: "Accessible anywhere, simplifies exam management significantly.",
     },
     {
       id: 3,
       name: "Dr. Meera ",
-      image: "src/assets/prof/teacher3.jpg",
+      image: "/prof/teacher3.jpg",
       review:
         "Visual schedules reduce confusion, making coordination seamless.",
     },
     {
       id: 4,
       name: "Prof. Joshi ",
-      image: "src/assets/prof/teacher4.jpg",
+      image: "/prof/teacher4.jpg",
       review: `"Hassle-free scheduling with intuitive features, highly recommend! "`,
     },
     {
       id: 5,
       name: "Mr. Poddar ",
-      image: "src/assets/prof/teacher5.jpg",
+      image: "/prof/teacher5.jpg",
       review: `"User-friendly and time-saving, perfect for managing complex schedules! "`,
     },
   ];
@@ -223,7 +223,7 @@ const Hero = () => {
                   }}
                 >
                   <Image
-                    src="/src/assets/hero/exam.png"
+                    src="/hero/exam.png"
                     height={160}
                     alt="exam"
                     className="rounded-lg"
