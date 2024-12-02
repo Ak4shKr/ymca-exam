@@ -1,5 +1,6 @@
 import { Button, Tooltip } from "@mantine/core";
 import { Plus } from "lucide-react";
+import PropTypes from "prop-types";
 
 export const DashboardHeader = ({ title, ButtonProps = {} }) => {
   return (
@@ -25,4 +26,9 @@ export const DashboardHeader = ({ title, ButtonProps = {} }) => {
       </div>
     </div>
   );
+};
+
+DashboardHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  ButtonProps: PropTypes.object,
 };

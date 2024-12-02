@@ -1,4 +1,5 @@
-import { AppShell, Burger, Group, Skeleton } from "@mantine/core";
+import { AppShell, Burger, Group } from "@mantine/core";
+import PropTypes from "prop-types";
 import { useDisclosure } from "@mantine/hooks";
 import { useLocation } from "react-router-dom";
 
@@ -75,4 +76,8 @@ export const CollapseDesktop = ({ children }) => {
       </AppShell.Main>
     </AppShell>
   );
+};
+
+CollapseDesktop.propTypes = {
+  children: PropTypes.node.isRequired,
 };
