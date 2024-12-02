@@ -1,5 +1,5 @@
 import { Paper, Table } from "@mantine/core";
-import { CollapseDesktop } from "./layout";
+import { CollapseDesktop } from "./Layout";
 import { DashboardHeader } from "./DashboardHeader";
 
 export const ProfManage = () => {
