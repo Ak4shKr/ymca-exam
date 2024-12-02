@@ -307,24 +307,17 @@ const Hero = () => {
               align="center"
               loop
               className="shadow-lg"
-              breakpoints={[
-                { maxWidth: "sm", slideSize: "100%", slideGap: "md" },
-                { maxWidth: "md", slideSize: "70%", slideGap: "lg" },
-              ]}
             >
               {Testimonials.map((testimonial, index) => (
-                <Carousel.Slide key={index}>
+                <Carousel.Slide key={index} style={{ marginRight: 10 }}>
                   <div className="bg-[#3c92d8] text-white p-6 rounded-lg shadow-lg flex flex-col items-center mx-2 h-full">
-                    {/* Image Section */}
                     <div className="w-24 h-24 sm:w-32 sm:h-32 mb-4 relative flex items-center justify-center overflow-hidden rounded-full border-2 border-violet-600">
                       <Image
-                        src={testimonial.image}
+                        src={testimonial.image} // Replace with actual image paths
                         alt={`Teacher ${index + 1}`}
                         className="object-cover w-full h-full"
-                        fit="cover"
                       />
                     </div>
-                    {/* Text Content Section */}
                     <h3 className="text-lg font-semibold mb-3">
                       {testimonial.name}
                     </h3>
