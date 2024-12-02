@@ -446,7 +446,7 @@ const Hero = () => {
                     rel="noopener noreferrer"
                   >
                     <img
-                      src="/src/assets/icons/linkedin.png"
+                      src="/icons/linkedin.png"
                       alt="LinkedIn"
                       className="w-10 h-10 rounded-full p-2 bg-gray-600 hover:bg-gray-500 transition-all"
                     />
@@ -457,7 +457,7 @@ const Hero = () => {
                     rel="noopener noreferrer"
                   >
                     <img
-                      src="/src/assets/icons/github.png"
+                      src="/icons/github.png"
                       alt="GitHub"
                       className="w-10 h-10 rounded-full p-2 bg-gray-700 hover:bg-gray-600 transition-all"
                     />
@@ -468,7 +468,7 @@ const Hero = () => {
                     rel="noopener noreferrer"
                   >
                     <img
-                      src="/src/assets/icons/twitter.png"
+                      src="/icons/twitter.png"
                       alt="Twitter"
                       className="w-10 h-10 rounded-full p-2 bg-gray-700 hover:bg-gray-600 transition-all"
                     />
