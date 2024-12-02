@@ -87,11 +87,7 @@ export const Sidebar = () => {
         {/* Logo Section */}
         <div className="sidebar__logo mb-6 mt-2 flex justify-center">
           <a href="/">
-            <img
-              src="/src/assets/logo/ymca_logo.png"
-              alt="YMCA Logo"
-              width="44"
-            />
+            <img src="/logo/ymca_logo.png" alt="YMCA Logo" width="44" />
           </a>
         </div>
 
