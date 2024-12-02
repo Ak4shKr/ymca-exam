@@ -223,7 +223,7 @@ const Hero = () => {
                   }}
                 >
                   <Image
-                    src="/hero/exam.png"
+                    src="/Hero/exam.png"
                     height={160}
                     alt="exam"
                     className="rounded-lg"
