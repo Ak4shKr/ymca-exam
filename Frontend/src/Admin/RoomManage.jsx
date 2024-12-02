@@ -8,7 +8,7 @@ import {
   Group,
   Tooltip,
 } from "@mantine/core";
-import { CollapseDesktop } from ".Layout";
+import { CollapseDesktop } from "./Layout";
 import { DashboardHeader } from "./DashboardHeader";
 import { useState } from "react";
 import { Edit, Trash2 } from "lucide-react";
