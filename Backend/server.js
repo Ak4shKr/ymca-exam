@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend URL
+    origin: "https://ymca-exam.vercel.app", // Frontend URL
     credentials: true, // Allow cookies if needed
   })
 );
