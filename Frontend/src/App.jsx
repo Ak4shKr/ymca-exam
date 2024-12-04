@@ -46,8 +46,22 @@ const App = () => {
               </ProtectedRoutes>
             }
           />
-          <Route path="/dashboard" element={<RoomManage />} />
-          <Route path="/dashboard/professors" element={<ProfManage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoutes>
+                <RoomManage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/dashboard/professors"
+            element={
+              <ProtectedRoutes>
+                <ProfManage />
+              </ProtectedRoutes>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

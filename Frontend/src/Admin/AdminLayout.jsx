@@ -47,11 +47,13 @@ export const CollapseDesktop = ({ children }) => {
           />
 
           <div className="flex items-center">
-            <img
-              src="/logo/ymca_logo.png"
-              alt="YMCA Logo"
-              className="h-9 w-auto mr-4"
-            />
+            <a href="/">
+              <img
+                src="/logo/ymca_logo.png"
+                alt="YMCA Logo"
+                className="h-9 w-auto mr-4"
+              />
+            </a>
             <h2 className="font-exo font-semibold text-xl">DashBoard</h2>
           </div>
         </Group>
