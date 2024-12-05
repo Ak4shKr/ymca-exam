@@ -25,7 +25,10 @@ export const createRoom = async (req, res) => {
 
 export const deleteRoom = async (req, res) => {
   try {
-    const { number } = req.body;
+    const { number } = req.query; // Access the query parameter
+    if (!number) {
+      return res.status(400).json({ error: "Room number is required" });
+    }
     const room = await Room.findOne({ number });
     if (!room) {
       return res.status(404).json({ error: "Room not found" });

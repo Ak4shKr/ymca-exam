@@ -1,80 +1,41 @@
 import { Paper, Table } from "@mantine/core";
 import { CollapseDesktop } from "./AdminLayout";
 import { DashboardHeader } from "./DashboardHeader";
+import { useEffect, useState } from "react";
+import { notifications } from "@mantine/notifications";
+import service from "../httpd/service";
 
 export const ProfManage = () => {
-  const roomdata = [
-    {
-      index: 1,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 2,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 3,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "UnBlock",
-    },
-    {
-      index: 4,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 5,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 6,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "UnBlock",
-    },
-    {
-      index: 7,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 8,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 9,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "Block",
-    },
-    {
-      index: 10,
-      name: "Akash",
-      email: "akashsahabanaul@gmail.com",
-      gender: "Male",
-      action: "UnBlock",
-    },
-  ];
+  const [professors, setProfessors] = useState([]);
+  const roomdata = [];
+
+  const fetchProfessors = async () => {
+    try {
+      const response = await service.get("/all-professor");
+      setProfessors(response.data.professors);
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: "Professors Fetch Error",
+        message: error.response.data.error || "Something went wrong",
+        color: "red",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchProfessors();
+  }, []);
+
+  professors.map((professor, index) => {
+    roomdata.push({
+      index: index + 1,
+      name: professor.name,
+      email: professor.email,
+      gender: professor.gender,
+      action: professor.isVerified ? "Block" : "Unblock",
+    });
+  });
 
   const rows = roomdata.map((item) => (
     <Table.Tr key={item.index}>
