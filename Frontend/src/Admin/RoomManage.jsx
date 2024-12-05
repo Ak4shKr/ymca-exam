@@ -349,7 +349,7 @@ export const RoomManage = () => {
                 mt="sm"
                 color="#0058e4"
               >
-                Update Room
+                {loading ? "Processing..." : "Update Room"}
               </Button>
             </div>
           </form>
