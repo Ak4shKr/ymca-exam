@@ -22,18 +22,19 @@ export const Navbar = () => {
           <Tooltip label="Admin" position="left" color="dark" withArrow>
             <button
               // onClick={() => setModalOpen(true)}
-              className=" text-white/90 text-sm p-[2px] px-4 border border-white/80  rounded-md hover:text-red-500 "
+              className=" text-white/90 text-sm p-[2px] px-2 border border-white/80  rounded-md hover:text-red-500 "
             >
               <a href="/dashboard">Admin</a>
             </button>
           </Tooltip>
           <Tooltip label="UserName" position="left" color="dark" withArrow>
-            <button className="font-medium text-sm text-white p-[2px] px-4 border bg-[#3f4bd1] border-blue-600  rounded-md">
+            <button className="text-sm text-white p-[2px] px-2 border bg-[#3f4bd1] border-blue-600  rounded-md">
               {gender == "male" ? (
                 <CgBoy className="inline-block mr-2 mb-1 " />
               ) : (
                 <GrUserFemale className="inline-block mr-2 mb-1" />
               )}
+
               <span>{getUser().name.split(" ")[0]}</span>
             </button>
           </Tooltip>

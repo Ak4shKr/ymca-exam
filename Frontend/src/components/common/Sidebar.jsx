@@ -87,7 +87,7 @@ export const Sidebar = () => {
         {/* Logo Section */}
         <div className="sidebar__logo mb-6 mt-2 flex justify-center">
           <a href="/">
-            <img src="/logo/ymca_logo.png" alt="YMCA Logo" width="44" />
+            <img src="/logo/ymca_logo.png" alt="YMCA Logo" width="36" />
           </a>
         </div>
 
@@ -112,13 +112,13 @@ export const Sidebar = () => {
                       }
                     : undefined
                 }
-                className={`sidebar__menu-item flex items-center gap-3 py-2 px-5 rounded-l-md text-md font-semibold cursor-pointer transition-colors ${
+                className={`sidebar__menu-item flex items-center gap-3 py-2 px-3 rounded-l-md text-md font-semibold cursor-pointer transition-colors ${
                   location.pathname === item.path
                     ? "bg-[#3f4bd1]"
                     : "hover:bg-[#3f4bd16b]"
                 }`}
               >
-                <item.icon size={20} className="text-white" />
+                <item.icon size={18} className="text-white" />
                 {toggle && (
                   <span className="text-white/90 truncate ">{item.name}</span>
                 )}
@@ -129,10 +129,10 @@ export const Sidebar = () => {
       </div>
 
       {/* Bottom Icon */}
-      <div className="flex justify-end px-4 mb-4">
+      <div className="flex justify-end px-3 mb-4">
         <Tooltip label="Toggle Sidebar" withArrow color="dark" position="right">
           <ArrowLeftRight
-            size={20}
+            size={18}
             className="text-gray-200 hover:text-[#3f4bd1] cursor-pointer"
             onClick={handleToggle}
           />

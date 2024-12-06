@@ -45,25 +45,25 @@ export const Contact = () => {
     }
   };
   return (
-    <div className="w-[90%] mx-auto pt-12 mt-16">
+    <div className="md:w-[90%] mx-auto pt-12 mt-16">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-exo font-semibold text-white mb-2">
+        <h1 className="text-3xl  font-exo font-semibold text-white mb-2">
           Contact Us
         </h1>
-        <p className="text-sm font-exo text-white mt-1">
+        <p className="text-sm px-2 font-exo text-white mt-1">
           We are honoured to receive your comments and suggestions. Please feel
           free to contact us:
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-between items-center bg-[#101010] px-6 py-8 rounded-lg shadow-xl">
+      <div className="flex flex-col lg:flex-row justify-between items-center bg-[#101010] px-2 md:px-6 py-8 rounded-lg shadow-xl">
         {/* Left Form */}
         <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
           {/* <h2 className="text-2xl font-exo font-bold text-white mb-6">
                 Send Us A Message
               </h2> */}
           <form className="space-y-4 w-[90%] mx-auto" onSubmit={handleSubmit}>
-            <div className="flex gap-4">
+            <div className="flex gap-2 md:gap-4">
               <Input.Wrapper label="Name" size="xs" className="w-1/2">
                 <Input
                   size="xs"
@@ -109,13 +109,13 @@ export const Contact = () => {
         </div>
 
         {/* Right Contact Info */}
-        <div className="w-full lg:w-[48%] text-white">
+        <div className="w-full lg:w-[48%] text-white px-2">
           <div className="w-full md:w-[80%] lg:w-[70%] mx-auto space-y-4">
-            <h2 className="text-2xl font-exo font-semibold mb-6">
+            <h2 className="text-xl font-exo font-semibold mb-4">
               Get In Touch
             </h2>
-            <div className="space-y-4">
-              <p className="text-md">
+            <div className="space-y-2">
+              <p className="text-sm">
                 <span className="font-semibold">Email:</span>{" "}
                 <a
                   href="mailto:akashsahabanaul@gmail.com"
@@ -124,7 +124,7 @@ export const Contact = () => {
                   akashsahabanaul@gmail.com
                 </a>
               </p>
-              <p className="text-md">
+              <p className="text-sm">
                 <span className="font-semibold">Phone:</span>{" "}
                 <a className="text-indigo-400 hover:text-indigo-300 transition-colors">
                   +91 76670 XXXXX
@@ -173,7 +173,7 @@ export const Contact = () => {
       </div>
 
       {/* Footer - Copyright */}
-      <div className="text-center text-base text-gray-400 mt-12">
+      <div className="text-center text-sm text-gray-400 mt-12 ">
         <p>&copy; {new Date().getFullYear()} YMCA. All Rights Reserved.</p>
       </div>
     </div>

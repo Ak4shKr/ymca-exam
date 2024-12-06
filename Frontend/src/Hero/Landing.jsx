@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 export const Landing = () => {
   return (
-    <div className="flex flex-col-reverse md:flex-row items-center justify-center min-h-screen px-4 md:px-8 py-8 md:py-0 gap-12 md:gap-12">
+    <div className="flex flex-col-reverse md:flex-row items-center justify-center min-h-[94vh] md:px-8 py-8 md:py-0 gap-12 md:gap-12">
       {/* Text Content */}
       <div className="w-full md:w-[60%] text-white text-center md:text-left">
         <motion.div
@@ -26,7 +26,7 @@ export const Landing = () => {
           <div className="flex gap-4 justify-center md:justify-start">
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <Button
-                className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 font-exo px-6 py-2 text-base"
+                className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 font-exo px-4 py-2 text-base"
                 radius="md"
               >
                 <a href="/book-exam">Get Started</a>
@@ -34,7 +34,7 @@ export const Landing = () => {
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <Button
-                className="hover:bg-blue-600 transition-all duration-300 px-6 py-2 text-base"
+                className="hover:bg-blue-600 transition-all duration-300 px-4 py-2 text-base"
                 radius="md"
               >
                 Learn More
@@ -51,7 +51,7 @@ export const Landing = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="bg-gradient-to-r from-violet-600 to-blue-500 p-1 rounded-lg">
+          <div className="bg-gradient-to-r from-violet-600 to-blue-500 p-[2px] rounded-lg">
             <Card shadow="sm" padding="xl" radius="md" withBorder>
               <motion.div
                 animate={{

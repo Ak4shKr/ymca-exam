@@ -3,7 +3,7 @@ import { featuresData } from "../Data/data";
 
 export const Features = () => {
   return (
-    <div className="py-12 px-4 md:px-8 bg-dark text-white">
+    <div className="py-12 md:px-8 bg-dark text-white">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-exo font-semibold text-white">
           Why Choose Us
