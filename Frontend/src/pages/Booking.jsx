@@ -200,7 +200,7 @@ export const Booking = () => {
       <form onSubmit={handleAvailableRooms}>
         <div className="flex flex-wrap mx-auto mt-4 bg-[#0e13144f] border border-gray-700 rounded-lg p-4 shadow-md">
           {/* branch input */}
-          <div className="w-full md:w-1/2 px-4">
+          <div className="w-full md:w-1/2 md:px-4">
             <Select
               label="Select Branch"
               placeholder="Pick branch"
@@ -216,7 +216,7 @@ export const Booking = () => {
             />
           </div>
           {/* semester input */}
-          <div className="w-full md:w-1/2 px-4">
+          <div className="w-full md:w-1/2 md:px-4">
             <Select
               label="Select Semester"
               placeholder="Pick semester"
@@ -232,7 +232,7 @@ export const Booking = () => {
             />
           </div>
           {/* subject input */}
-          <div className="w-full md:w-1/2 px-4 mt-4">
+          <div className="w-full md:w-1/2 md:px-4 mt-4">
             <Input.Wrapper label="Subject" description="" error="">
               <Input
                 required
@@ -244,7 +244,7 @@ export const Booking = () => {
             </Input.Wrapper>
           </div>
           {/* date input */}
-          <div className="w-full md:w-1/2 px-4 mt-4">
+          <div className="w-full md:w-1/2 md:px-4 md:mt-4">
             <DateInput
               value={inputdate}
               size="xs"
