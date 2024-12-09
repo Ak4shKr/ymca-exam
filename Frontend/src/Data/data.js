@@ -54,7 +54,7 @@ export const faqsData = [
     emoji: "👨‍💻",
     value: "Who developed this platform?",
     description:
-      "This platform was developed by Akash Kumar, an ECE student, to streamline exam scheduling for educational institutions.",
+      "This platform was developed by Akash Kumar, an ECE student, under the guidance of Dr. Sonam Khera professor dept. of Electronics, to streamline exam scheduling for educational institutions.",
   },
 ];
 
