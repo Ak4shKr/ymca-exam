@@ -10,6 +10,7 @@ import { AppShell, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import "./index.css";
+import { LoaderComponent } from "./components/Loader.jsx";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")).render(
     <ModalsProvider />
     <Notifications />
     <AppShell />
+    <LoaderComponent />
     <App />
   </MantineProvider>
 );
