@@ -8,6 +8,7 @@ import { CardYourBooking } from "./components/card/CardYourBooking";
 import Hero from "./pages/Hero";
 import { RoomManage } from "./Admin/RoomManage";
 import { ProfManage } from "./Admin/ProfManage";
+import { ProtectedAdmin } from "./components/routes/ProtectedAdmin";
 
 const App = () => {
   return (
@@ -49,17 +50,17 @@ const App = () => {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoutes>
+              <ProtectedAdmin>
                 <RoomManage />
-              </ProtectedRoutes>
+              </ProtectedAdmin>
             }
           />
           <Route
             path="/dashboard/professors"
             element={
-              <ProtectedRoutes>
+              <ProtectedAdmin>
                 <ProfManage />
-              </ProtectedRoutes>
+              </ProtectedAdmin>
             }
           />
           <Route path="/login" element={<Login />} />

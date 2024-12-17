@@ -4,12 +4,30 @@ import { useAuthStore } from "../../store/authState";
 import { GrUserFemale } from "react-icons/gr";
 import { Button, Input, Modal, PasswordInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 export const Navbar = () => {
   const { getUser } = useAuthStore();
+  const user = getUser();
   const gender = getUser().gender;
 
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAdminClick = () => {
+    if (user && user.isAdmin) {
+      // Only navigate to /dashboard if the user is an admin
+      navigate("/dashboard");
+    } else {
+      // Show the notification if the user is not an admin
+      notifications.show({
+        title: "Unauthorized",
+        message: "You need to be an Admin to access this page.",
+        color: "red",
+      });
+    }
+  };
 
   return (
     <>
@@ -21,10 +39,10 @@ export const Navbar = () => {
           </Tooltip>
           <Tooltip label="Admin" position="left" color="dark" withArrow>
             <button
-              // onClick={() => setModalOpen(true)}
+              onClick={handleAdminClick}
               className=" text-white/90 text-sm p-[2px] px-2 border border-white/80  rounded-md hover:text-red-500 "
             >
-              <a href="/dashboard">Admin</a>
+              Admin
             </button>
           </Tooltip>
           <Tooltip label="UserName" position="left" color="dark" withArrow>
