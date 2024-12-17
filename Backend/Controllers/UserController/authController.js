@@ -3,12 +3,17 @@ import User from "../../Models/UserModel.js";
 import { otpGenerate } from "../../utills/otpGenerate.js";
 import { sendEmail } from "../../utills/emailService.js";
 import { generateToken } from "../../utills/generateToken.js";
+import { validateEmail } from "../../utills/validateEmail.js";
 
 export const Register = async (req, res) => {
   try {
     const { name, email, password, gender } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({ error: "Please use jcboseust email only" });
     }
 
     // Check if the user already exists
