@@ -41,7 +41,7 @@ export const ProfManage = () => {
         status: action === "Block" ? "false" : "true",
       });
       notifications.show({
-        title: "Professor Block",
+        title: "Professor Status",
         message: response.data.message,
         color: "blue",
       });
