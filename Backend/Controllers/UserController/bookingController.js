@@ -1,6 +1,116 @@
 import Booking from "../../Models/BookingModel.js";
 import Room from "../../Models/RoomModel.js";
 import User from "../../Models/UserModel.js";
+import mongoose from "mongoose";
+// export const bookRoom = async (req, res) => {
+//   try {
+//     const { semester, branch, subject, rooms, date, slot, professorId } =
+//       req.body;
+
+//     // Validate required fields
+//     if (!semester || !branch || !subject || !rooms || !date || !professorId) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
+
+//     // Validate the slot
+//     const validSlots = ["1", "2"];
+//     if (!validSlots.includes(slot)) {
+//       return res.status(400).json({ error: "Invalid slot provided" });
+//     }
+
+//     // Check if the professor exists
+//     const professor = await User.findById(professorId);
+//     if (!professor) {
+//       return res.status(400).json({ error: "Professor does not exist" });
+//     }
+
+//     // Check if the professor is already booked for the same date and slot
+//     const professorBooked = await Booking.findOne({
+//       date,
+//       slot,
+//       professor: {
+//         $elemMatch: {
+//           professorId: professorId,
+//         },
+//       },
+//     });
+//     if (professorBooked) {
+//       return res.status(400).json({
+//         error: `Professor is already booked for Slot ${slot} on this date`,
+//       });
+//     }
+
+//     // Validate rooms and seat availability
+//     const roomDetails = [];
+//     for (const roomData of rooms) {
+//       const room = await Room.findById(roomData.room); // Fetch room by ID
+//       if (!room) {
+//         return res
+//           .status(400)
+//           .json({ error: `Room ${roomData.room} does not exist` });
+//       }
+
+//       const existingBookingForSlot = room.booking.find(
+//         (booking) =>
+//           booking.slot === slot &&
+//           new Date(booking.date).toISOString().split("T")[0] ===
+//             new Date(date).toISOString().split("T")[0]
+//       );
+//       const alreadyBookedSeats = existingBookingForSlot
+//         ? existingBookingForSlot.bookedSeats
+//         : 0;
+//       const availableSeats = room.totalSeats - alreadyBookedSeats;
+
+//       if (roomData.seats > availableSeats) {
+//         return res.status(400).json({
+//           error: `Only ${availableSeats} seats are available for Slot ${slot} on this date for room ${room.number}`,
+//         });
+//       }
+
+//       //update room with new booking
+//       if (existingBookingForSlot) {
+//         existingBookingForSlot.bookedSeats += roomData.seats;
+//       } else {
+//         room.booking.push({
+//           date,
+//           slot,
+//           bookedSeats: roomData.seats,
+//         });
+//       }
+
+//       await room.save();
+//       roomDetails.push({
+//         room: room._id,
+//         roomNumber: room.number,
+//         seatsBooked: roomData.seats,
+//       });
+//     }
+
+//     // Create a new booking entry for the date and slot
+//     const newBooking = new Booking({
+//       semester,
+//       branch,
+//       subject,
+//       rooms: roomDetails,
+//       date,
+//       slot,
+//       professor: [
+//         {
+//           professorId: professor._id,
+//           professorName: professor.name,
+//         },
+//       ],
+//     });
+
+//     await newBooking.save();
+
+//     res
+//       .status(200)
+//       .json({ message: `Room(s) booked successfully for Slot ${slot}` });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 export const bookRoom = async (req, res) => {
   try {
@@ -28,11 +138,7 @@ export const bookRoom = async (req, res) => {
     const professorBooked = await Booking.findOne({
       date,
       slot,
-      professor: {
-        $elemMatch: {
-          professorId: professorId,
-        },
-      },
+      professor: { $elemMatch: { professorId: professorId } },
     });
     if (professorBooked) {
       return res.status(400).json({
@@ -40,26 +146,30 @@ export const bookRoom = async (req, res) => {
       });
     }
 
+    // Generate a unique bookingId automatically
+    const bookingId = new mongoose.Types.ObjectId();
+
     // Validate rooms and seat availability
     const roomDetails = [];
     for (const roomData of rooms) {
-      const room = await Room.findById(roomData.room); // Fetch room by ID
+      const room = await Room.findById(roomData.room);
       if (!room) {
         return res
           .status(400)
           .json({ error: `Room ${roomData.room} does not exist` });
       }
 
-      const existingBookingForSlot = room.booking.find(
-        (booking) =>
-          booking.slot === slot &&
-          new Date(booking.date).toISOString().split("T")[0] ===
-            new Date(date).toISOString().split("T")[0]
-      );
-      const alreadyBookedSeats = existingBookingForSlot
-        ? existingBookingForSlot.bookedSeats
-        : 0;
-      const availableSeats = room.totalSeats - alreadyBookedSeats;
+      // Sum up already booked seats for the same date and slot
+      const totalBookedSeatsForSlot = room.booking
+        .filter(
+          (b) =>
+            b.slot === slot &&
+            new Date(b.date).toISOString().split("T")[0] ===
+              new Date(date).toISOString().split("T")[0]
+        )
+        .reduce((sum, b) => sum + b.bookedSeats, 0);
+
+      const availableSeats = room.totalSeats - totalBookedSeatsForSlot;
 
       if (roomData.seats > availableSeats) {
         return res.status(400).json({
@@ -67,18 +177,16 @@ export const bookRoom = async (req, res) => {
         });
       }
 
-      //update room with new booking
-      if (existingBookingForSlot) {
-        existingBookingForSlot.bookedSeats += roomData.seats;
-      } else {
-        room.booking.push({
-          date,
-          slot,
-          bookedSeats: roomData.seats,
-        });
-      }
+      // Update room booking with generated bookingId
+      room.booking.push({
+        bookingId: bookingId, // Auto-generated bookingId
+        date,
+        slot,
+        bookedSeats: roomData.seats,
+      });
 
       await room.save();
+
       roomDetails.push({
         room: room._id,
         roomNumber: room.number,
@@ -86,8 +194,9 @@ export const bookRoom = async (req, res) => {
       });
     }
 
-    // Create a new booking entry for the date and slot
+    // Create a new booking entry with the generated bookingId
     const newBooking = new Booking({
+      _id: bookingId, // Use the auto-generated bookingId
       semester,
       branch,
       subject,
@@ -112,97 +221,97 @@ export const bookRoom = async (req, res) => {
   }
 };
 
-export const getAvailableRoomsByDate = async (req, res) => {
-  try {
-    const { date, branch, semester } = req.body;
+// export const getAvailableRoomsByDate = async (req, res) => {
+//   try {
+//     const { date, branch, semester } = req.body;
 
-    if (!date) {
-      return res.status(400).json({ error: "Date is required" });
-    }
-    if (!branch || !semester) {
-      return res
-        .status(400)
-        .json({ error: "Branch and semester are required" });
-    }
+//     if (!date) {
+//       return res.status(400).json({ error: "Date is required" });
+//     }
+//     if (!branch || !semester) {
+//       return res
+//         .status(400)
+//         .json({ error: "Branch and semester are required" });
+//     }
 
-    // Parse the date
-    const [year, month, day] = date.split("-");
-    const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
+//     // Parse the date
+//     const [year, month, day] = date.split("-");
+//     const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
 
-    //find slot1booking & slot2booking if , on particular date, branch and semester
-    const slot1Booking = await Booking.find({
-      date: bookingDate,
-      slot: "1",
-      branch,
-      semester,
-    });
+//     //find slot1booking & slot2booking if , on particular date, branch and semester
+//     const slot1Booking = await Booking.find({
+//       date: bookingDate,
+//       slot: "1",
+//       branch,
+//       semester,
+//     });
 
-    const slot2Booking = await Booking.find({
-      date: bookingDate,
-      slot: "2",
-      branch,
-      semester,
-    });
+//     const slot2Booking = await Booking.find({
+//       date: bookingDate,
+//       slot: "2",
+//       branch,
+//       semester,
+//     });
 
-    if (slot1Booking.length > 0 && slot2Booking.length > 0) {
-      return res
-        .status(400)
-        .json({ error: "Already book for both slots, try for another date" });
-    }
+//     if (slot1Booking.length > 0 && slot2Booking.length > 0) {
+//       return res
+//         .status(400)
+//         .json({ error: "Already book for both slots, try for another date" });
+//     }
 
-    // Fetch all rooms
-    const allRooms = await Room.find();
+//     // Fetch all rooms
+//     const allRooms = await Room.find();
 
-    const availableRooms = allRooms.map((room) => {
-      const slots = ["1", "2"].map((slot) => {
-        // Find the existing booking for the room, date, and slot
-        const existingBookings = room.booking.filter(
-          (booking) =>
-            new Date(booking.date).toISOString().split("T")[0] ===
-              bookingDate.toISOString().split("T")[0] && booking.slot === slot
-        );
+//     const availableRooms = allRooms.map((room) => {
+//       const slots = ["1", "2"].map((slot) => {
+//         // Find the existing booking for the room, date, and slot
+//         const existingBookings = room.booking.filter(
+//           (booking) =>
+//             new Date(booking.date).toISOString().split("T")[0] ===
+//               bookingDate.toISOString().split("T")[0] && booking.slot === slot
+//         );
 
-        // Calculate the total booked seats for the given slot and date
-        const totalBookedSeats = existingBookings.reduce(
-          (acc, booking) => acc + booking.bookedSeats,
-          0
-        );
-        const availableSeats = room.totalSeats - totalBookedSeats;
+//         // Calculate the total booked seats for the given slot and date
+//         const totalBookedSeats = existingBookings.reduce(
+//           (acc, booking) => acc + booking.bookedSeats,
+//           0
+//         );
+//         const availableSeats = room.totalSeats - totalBookedSeats;
 
-        return {
-          slot,
-          availableSeats,
-        };
-      });
+//         return {
+//           slot,
+//           availableSeats,
+//         };
+//       });
 
-      // Return room details with availability
-      return {
-        id: room.id,
-        room: room.number,
-        totalSeats: room.totalSeats,
-        slots,
-      };
-    });
+//       // Return room details with availability
+//       return {
+//         id: room.id,
+//         room: room.number,
+//         totalSeats: room.totalSeats,
+//         slots,
+//       };
+//     });
 
-    if (slot1Booking.length > 0) {
-      availableRooms.forEach((room) => {
-        room.slots = room.slots.filter((slot) => slot.slot !== "1");
-      });
-    } else if (slot2Booking.length > 0) {
-      availableRooms.forEach((room) => {
-        room.slots = room.slots.filter((slot) => slot.slot !== "2");
-      });
-    }
+//     if (slot1Booking.length > 0) {
+//       availableRooms.forEach((room) => {
+//         room.slots = room.slots.filter((slot) => slot.slot !== "1");
+//       });
+//     } else if (slot2Booking.length > 0) {
+//       availableRooms.forEach((room) => {
+//         room.slots = room.slots.filter((slot) => slot.slot !== "2");
+//       });
+//     }
 
-    // Responce data
-    res.status(200).json({
-      date: bookingDate.toISOString().split("T")[0],
-      availableRooms,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     // Responce data
+//     res.status(200).json({
+//       date: bookingDate.toISOString().split("T")[0],
+//       availableRooms,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 // export const getAvailableRoomsByDate = async (req, res) => {
 //   try {
@@ -277,6 +386,102 @@ export const getAvailableRoomsByDate = async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
+
+export const getAvailableRoomsByDate = async (req, res) => {
+  try {
+    const { date, branch, semester } = req.body;
+
+    // Validate required inputs
+    if (!date) {
+      return res.status(400).json({ error: "Date is required" });
+    }
+    if (!branch || !semester) {
+      return res
+        .status(400)
+        .json({ error: "Branch and semester are required" });
+    }
+
+    // Parse the date
+    const [year, month, day] = date.split("-");
+    const bookingDate = new Date(Date.UTC(year, month - 1, day)); // Treat as UTC
+
+    // Find bookings for Slot 1 and Slot 2
+    const slot1Booking = await Booking.find({
+      date: bookingDate,
+      slot: "1",
+      branch,
+      semester,
+    });
+
+    const slot2Booking = await Booking.find({
+      date: bookingDate,
+      slot: "2",
+      branch,
+      semester,
+    });
+
+    if (slot1Booking.length > 0 && slot2Booking.length > 0) {
+      return res
+        .status(400)
+        .json({ error: "Already booked for both slots, try another date" });
+    }
+
+    // Fetch all rooms
+    const allRooms = await Room.find();
+
+    const availableRooms = allRooms.map((room) => {
+      const slots = ["1", "2"].map((slot) => {
+        // Filter bookings for this room, date, and slot
+        const existingBookings = room.booking.filter(
+          (booking) =>
+            new Date(booking.date).toISOString().split("T")[0] ===
+              bookingDate.toISOString().split("T")[0] && booking.slot === slot
+        );
+
+        // Calculate the total booked seats for the slot
+        const totalBookedSeats = existingBookings.reduce(
+          (acc, booking) => acc + booking.bookedSeats,
+          0
+        );
+
+        const availableSeats = room.totalSeats - totalBookedSeats;
+
+        return {
+          slot,
+          availableSeats,
+        };
+      });
+
+      return {
+        id: room._id,
+        room: room.number,
+        totalSeats: room.totalSeats,
+        slots,
+      };
+    });
+
+    // Filter out slots if already booked in Slot 1 or Slot 2
+    if (slot1Booking.length > 0) {
+      availableRooms.forEach((room) => {
+        room.slots = room.slots.filter((slot) => slot.slot !== "1");
+      });
+    }
+
+    if (slot2Booking.length > 0) {
+      availableRooms.forEach((room) => {
+        room.slots = room.slots.filter((slot) => slot.slot !== "2");
+      });
+    }
+
+    // Response data
+    res.status(200).json({
+      date: bookingDate.toISOString().split("T")[0],
+      availableRooms,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const allBooking = async (req, res) => {
   try {
@@ -378,6 +583,15 @@ export const removeProfessor = async (req, res) => {
     );
 
     if (booking.professor.length === 0) {
+      for (const roomDetail of booking.rooms) {
+        const room = await Room.findById(roomDetail.room);
+        if (room) {
+          room.booking = room.booking.filter(
+            (b) => b.bookingId.toString() !== bookingId
+          );
+          await room.save();
+        }
+      }
       await Booking.deleteOne({ _id: bookingId });
       return res
         .status(200)
