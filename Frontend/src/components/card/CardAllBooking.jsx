@@ -14,12 +14,16 @@ import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../../store/authState";
 import { modals } from "@mantine/modals";
+import { useLoaderStore } from "../../store/loaderState";
 
 export const CardAllBooking = () => {
+  const setLoading = useLoaderStore((state) => state.setLoading);
+
   const { getUser } = useAuthStore();
   const user = getUser();
   const [responsedata, setResponsedata] = useState([]);
   const getBooking = async () => {
+    setLoading(true);
     try {
       const response = await service.get("/all-booking");
       const filteredBookings = response.data.bookings.filter(
@@ -33,6 +37,8 @@ export const CardAllBooking = () => {
         message: error.response.data.error,
         color: "red",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,6 +57,7 @@ export const CardAllBooking = () => {
   };
 
   const handleAddProfessor = async (bookingId) => {
+    setLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user || !user._id) {
@@ -83,6 +90,8 @@ export const CardAllBooking = () => {
         message: error.response.data.error,
         color: "red",
       });
+    } finally {
+      setLoading(false);
     }
   };
 

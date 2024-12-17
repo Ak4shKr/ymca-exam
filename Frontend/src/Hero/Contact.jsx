@@ -2,6 +2,7 @@ import { Button, Input, Textarea } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import service from "../httpd/service";
 import { useState } from "react";
+import { useLoaderStore } from "../store/loaderState";
 
 export const Contact = () => {
   const [name, setName] = useState("");
@@ -12,6 +13,7 @@ export const Contact = () => {
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleCommentChange = (e) => setComment(e.target.value);
 
+  const setloading = useLoaderStore((state) => state.setLoading);
   //handle contactUs form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ export const Contact = () => {
       email,
       comment,
     };
+    setloading(true);
     try {
       setLoading(true);
       const response = await service.post("/report", formData);
@@ -42,6 +45,7 @@ export const Contact = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
   return (

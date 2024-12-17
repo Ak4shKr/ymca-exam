@@ -11,8 +11,12 @@ import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import { redirect } from "react-router-dom";
+import { useLoaderStore } from "../store/loaderState";
 
 const Register = () => {
+  //global state for loading spinner
+  const setloading = useLoaderStore((state) => state.setLoading);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +35,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     if (!name || !email || !password || !gender) {
       notifications.show({
@@ -42,7 +45,8 @@ const Register = () => {
       setLoading(false);
       return;
     }
-
+    setLoading(true);
+    setloading(true);
     try {
       const response = await service.post("/register", {
         name,
@@ -68,12 +72,14 @@ const Register = () => {
       }
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
     setOtpLoading(true);
+    setloading(true);
 
     try {
       const response = await service.post("/verify-otp", {
@@ -100,6 +106,7 @@ const Register = () => {
       });
     } finally {
       setOtpLoading(false);
+      setloading(false);
     }
   };
 

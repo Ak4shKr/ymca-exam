@@ -14,11 +14,13 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "../../store/authState";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
+import { useLoaderStore } from "../../store/loaderState";
 
 export const CardYourBooking = () => {
   const [responsedata, setResponsedata] = useState([]);
   const { getUser } = useAuthStore();
   const professorId = getUser()._id;
+  const setloading = useLoaderStore((state) => state.setLoading);
 
   const openConfirm = (bookingId) => {
     modals.openConfirmModal({
@@ -35,6 +37,7 @@ export const CardYourBooking = () => {
   };
 
   const handleRemoveProfessor = async (bookingId) => {
+    setloading(true);
     try {
       const response = await service.post("/remove-professor", {
         professorId,
@@ -54,16 +57,21 @@ export const CardYourBooking = () => {
         message: error.response.data.error,
         color: "red",
       });
+    } finally {
+      setloading(false);
     }
   };
 
   const getBooking = async () => {
+    setloading(true);
     try {
       const response = await service.get(`/booking-professor/${professorId}`);
       setResponsedata(response.data.bookings);
       console.log(response.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setloading(false);
     }
   };
 

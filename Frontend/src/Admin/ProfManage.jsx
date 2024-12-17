@@ -4,12 +4,15 @@ import { DashboardHeader } from "./DashboardHeader";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import service from "../httpd/service";
+import { useLoaderStore } from "../store/loaderState";
 
 export const ProfManage = () => {
   const [professors, setProfessors] = useState([]);
   const roomdata = [];
+  const setloading = useLoaderStore((state) => state.setLoading);
 
   const fetchProfessors = async () => {
+    setloading(true);
     try {
       const response = await service.get("/all-professor");
       setProfessors(response.data.professors);
@@ -20,6 +23,8 @@ export const ProfManage = () => {
         message: error.response.data.error || "Something went wrong",
         color: "red",
       });
+    } finally {
+      setloading(false);
     }
   };
 

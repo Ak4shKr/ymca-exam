@@ -7,6 +7,7 @@ import { Card, Text, Box, Modal } from "@mantine/core";
 import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../store/authState";
+import { useLoaderStore } from "../store/loaderState";
 
 // interface Slot {
 //   slot: string;
@@ -50,6 +51,10 @@ const RoomCard = ({ availableRooms }) => {
   );
 };
 
+RoomCard.propTypes = {
+  availableRooms: [],
+};
+
 export const Booking = () => {
   const [inputdate, setInputDate] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
@@ -69,11 +74,13 @@ export const Booking = () => {
   //user state
   const { getUser } = useAuthStore();
   const professorId = getUser()._id;
+  const setloading = useLoaderStore((state) => state.setLoading);
 
   // available room check api
   const handleAvailableRooms = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setloading(true);
     try {
       const response = await service.post("/available-rooms", {
         date: formattedDate,
@@ -103,6 +110,7 @@ export const Booking = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
 
@@ -127,6 +135,8 @@ export const Booking = () => {
       professorId,
     };
 
+    setloading(true);
+
     try {
       setLoading(true);
       const response = await service.post("/booking", bookingData);
@@ -149,6 +159,7 @@ export const Booking = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
 

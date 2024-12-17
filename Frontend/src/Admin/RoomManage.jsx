@@ -17,6 +17,7 @@ import { CollapseDesktop } from "./AdminLayout";
 import { notifications } from "@mantine/notifications";
 import service from "../httpd/service";
 import { modals } from "@mantine/modals";
+import { useLoaderStore } from "../store/loaderState";
 
 export const RoomManage = () => {
   const [room, setRoom] = useState("");
@@ -27,13 +28,16 @@ export const RoomManage = () => {
   const [editRoom, setEditRoom] = useState("");
   const [editCapacity, setEditCapacity] = useState();
 
+  const setloading = useLoaderStore((state) => state.setLoading);
+
   const handleAddRoom = () => {
     setCreateModalOpen(true);
   };
   const submitAddRoom = async (e) => {
     e.preventDefault();
+    setloading(true);
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await service.post("/create-room", {
         number: room,
         capacity,
@@ -59,6 +63,7 @@ export const RoomManage = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
   const handleEditRoom = ({ roomId }) => {
@@ -73,8 +78,9 @@ export const RoomManage = () => {
 
   const handleEditRoomSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setloading(true);
     try {
-      setLoading(true);
       const response = await service.put("/update-room", {
         number: editRoom,
         capacity: editCapacity,
@@ -100,6 +106,7 @@ export const RoomManage = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
 
@@ -132,6 +139,7 @@ export const RoomManage = () => {
     // );
     // if (!Confirm) return;
     // console.log(typeof selectedRoom.number);
+    setloading(true);
     try {
       const response = await service.delete("/delete-room", {
         params: { number: selectedRoom.number },
@@ -151,6 +159,8 @@ export const RoomManage = () => {
         message: error.response.data.error || "Something went wrong",
         color: "red",
       });
+    } finally {
+      setloading(false);
     }
   };
 
@@ -158,6 +168,7 @@ export const RoomManage = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const roomdata = [];
   const fetchRooms = async () => {
+    setloading(true);
     try {
       const response = await service.get("/all-rooms");
       setRooms(response.data.rooms);
@@ -168,6 +179,8 @@ export const RoomManage = () => {
         message: error.response.data.error || "Something went wrong",
         color: "red",
       });
+    } finally {
+      setloading(false);
     }
   };
 

@@ -4,6 +4,7 @@ import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../store/authState";
 import { useNavigate } from "react-router-dom";
+import { useLoaderStore } from "../store/loaderState";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export const Login = () => {
   const [loading, setLoading] = useState(false);
   const { setToken, setUser } = useAuthStore();
   const navigate = useNavigate();
+  const setloading = useLoaderStore((state) => state.setLoading);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -25,6 +27,7 @@ export const Login = () => {
       return;
     }
     setLoading(true);
+    setloading(true);
 
     // Login logic here
     try {
@@ -52,6 +55,7 @@ export const Login = () => {
       });
     } finally {
       setLoading(false);
+      setloading(false);
     }
   };
 
