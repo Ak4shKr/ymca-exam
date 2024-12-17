@@ -44,13 +44,13 @@ export const CardYourBooking = () => {
         bookingId,
       });
       if (response.status == 200) {
+        await getBooking();
         notifications.show({
           title: "Success",
           message: "Professor removed successfully",
           color: "green",
         });
       }
-      getBooking();
     } catch (error) {
       notifications.show({
         title: "Failed",

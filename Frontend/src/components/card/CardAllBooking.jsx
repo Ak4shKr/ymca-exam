@@ -76,13 +76,13 @@ export const CardAllBooking = () => {
       });
 
       if (response.status == 200) {
+        await getBooking();
         notifications.show({
           title: "Success",
           message: "Professor added successfully",
           color: "green",
         });
       }
-      getBooking();
     } catch (error) {
       console.log(error.response.data.error);
       notifications.show({
