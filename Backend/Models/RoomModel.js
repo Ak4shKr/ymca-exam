@@ -12,6 +12,10 @@ const RoomSchema = new mongoose.Schema({
   },
   booking: [
     {
+      bookingId: {
+        type: String,
+        required: true, // Unique booking ID (must come from the Booking collection)
+      },
       date: {
         type: Date,
         required: true,
