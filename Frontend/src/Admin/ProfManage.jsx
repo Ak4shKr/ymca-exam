@@ -1,14 +1,15 @@
-import { Paper, Table } from "@mantine/core";
+import { Paper, Table, Text } from "@mantine/core";
 import { CollapseDesktop } from "./AdminLayout";
 import { DashboardHeader } from "./DashboardHeader";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import service from "../httpd/service";
 import { useLoaderStore } from "../store/loaderState";
+import { modals } from "@mantine/modals";
 
 export const ProfManage = () => {
   const [professors, setProfessors] = useState([]);
-  const roomdata = [];
+  const profdata = [];
   const setloading = useLoaderStore((state) => state.setLoading);
 
   const fetchProfessors = async () => {
@@ -32,9 +33,51 @@ export const ProfManage = () => {
     fetchProfessors();
   }, []);
 
+  const handleBlock = async (professorId, action) => {
+    setloading(true);
+    try {
+      const response = await service.post("/update-professor", {
+        professorId,
+        status: action === "Block" ? "false" : "true",
+      });
+      notifications.show({
+        title: "Professor Block",
+        message: response.data.message,
+        color: "blue",
+      });
+      await fetchProfessors();
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: "Professor Block Error",
+        message: error.response.data.error || "Something went wrong",
+        color: "red",
+      });
+    } finally {
+      setloading(false);
+    }
+  };
+
+  const openConfirm = (professorId, action) => {
+    modals.openConfirmModal({
+      title: `${action} Professor`,
+      centered: true,
+      children: (
+        <Text size="sm">Are you sure, want to {action} this professor?</Text>
+      ),
+      labels: { confirm: "Yes, do", cancel: "No, don't " },
+      confirmProps: { color: "#F0185C" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => {
+        handleBlock(professorId, action);
+      },
+    });
+  };
+
   professors.map((professor, index) => {
-    roomdata.push({
+    profdata.push({
       index: index + 1,
+      professorId: professor._id,
       name: professor.name,
       email: professor.email,
       gender: professor.gender,
@@ -42,7 +85,7 @@ export const ProfManage = () => {
     });
   });
 
-  const rows = roomdata.map((item) => (
+  const rows = profdata.map((item) => (
     <Table.Tr key={item.index}>
       <Table.Td ta="center">{item.index}</Table.Td>
       <Table.Td ta="center">{item.name}</Table.Td>
@@ -50,6 +93,7 @@ export const ProfManage = () => {
       <Table.Td ta="center">{item.gender}</Table.Td>
       <Table.Td
         ta="center"
+        onClick={() => openConfirm(item.professorId, item.action)}
         className={`${
           item.action === "Block" ? "text-green-500" : "text-red-500"
         } font-medium cursor-pointer hover:scale-105`}
