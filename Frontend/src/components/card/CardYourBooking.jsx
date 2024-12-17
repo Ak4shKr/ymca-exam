@@ -136,7 +136,7 @@ export const CardYourBooking = () => {
                 color="red"
                 mt="md"
                 size="xs"
-                disabled={data.professor.length < 2}
+                // disabled={data.professor.length < 2}
                 // onClick={() => handleRemoveProfessor(data._id)}
                 onClick={() => openConfirm(data._id)}
               >
