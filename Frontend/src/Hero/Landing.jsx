@@ -1,5 +1,6 @@
 import { Button, Card, Image } from "@mantine/core";
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 
 export const Landing = () => {
   return (
@@ -29,7 +30,7 @@ export const Landing = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 font-exo px-4 py-2 text-base"
                 radius="md"
               >
-                <a href="/book-exam">Get Started</a>
+                <Link to="/book-exam">Get Started</Link>
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>

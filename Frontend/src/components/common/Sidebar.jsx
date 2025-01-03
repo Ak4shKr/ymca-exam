@@ -7,7 +7,7 @@ import {
   ArrowLeftRight,
 } from "lucide-react";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { modals } from "@mantine/modals";
 import { Text, Tooltip } from "@mantine/core";
 
@@ -82,13 +82,17 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="sidebar flex flex-col justify-between py-2 pl-1 border-r border-gray-500">
+    <div
+      className={`sidebar flex flex-col justify-between py-2 border-r border-gray-500 transition-all duration-300 ${
+        toggle ? "w-48 pl-2" : "w-12 pl-1"
+      }`}
+    >
       <div>
         {/* Logo Section */}
         <div className="sidebar__logo mb-6 mt-2 flex justify-center">
-          <a href="/">
+          <Link to="/">
             <img src="/logo/ymca_logo.png" alt="YMCA Logo" width="36" />
-          </a>
+          </Link>
         </div>
 
         {/* Menu Items */}
@@ -101,8 +105,8 @@ export const Sidebar = () => {
               color="dark"
               position="right-end"
             >
-              <a
-                href={item.path}
+              <Link
+                to={item.path}
                 key={index}
                 onClick={
                   item.action
@@ -122,7 +126,7 @@ export const Sidebar = () => {
                 {toggle && (
                   <span className="text-white/90 truncate ">{item.name}</span>
                 )}
-              </a>
+              </Link>
             </Tooltip>
           ))}
         </div>

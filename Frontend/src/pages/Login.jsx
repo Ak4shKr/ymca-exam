@@ -3,7 +3,7 @@ import { Button, Input, PasswordInput } from "@mantine/core";
 import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../store/authState";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoaderStore } from "../store/loaderState";
 
 export const Login = () => {
@@ -107,12 +107,12 @@ export const Login = () => {
             </Button>
             <p className="text-white text-sm">
               Don&apos;t have an Account?{" "}
-              <a
+              <Link
                 className="text-green-700 font-semibold hover:text-green-600"
-                href="/register"
+                to="/register"
               >
                 SignUp
-              </a>
+              </Link>
             </p>
           </div>
         </form>

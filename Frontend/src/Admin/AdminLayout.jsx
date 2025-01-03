@@ -1,7 +1,7 @@
 import { AppShell, Burger, Group } from "@mantine/core";
 import PropTypes from "prop-types";
 import { useDisclosure } from "@mantine/hooks";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const navItem = [
   {
@@ -47,22 +47,22 @@ export const CollapseDesktop = ({ children }) => {
           />
 
           <div className="flex items-center">
-            <a href="/">
+            <Link to="/">
               <img
                 src="/logo/ymca_logo.png"
                 alt="YMCA Logo"
                 className="h-9 w-auto mr-4"
               />
-            </a>
+            </Link>
             <h2 className="font-exo font-semibold text-xl">DashBoard</h2>
           </div>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="xs" className="bg-gray-900/50">
         {navItem.map((item, index) => (
-          <a
+          <Link
             key={index}
-            href={item.path}
+            to={item.path}
             className={`text-md font-semibold py-1 my-1 ${
               location.pathname === item.path
                 ? "bg-[#3f4bd1]"
@@ -70,7 +70,7 @@ export const CollapseDesktop = ({ children }) => {
             } rounded-md px-4`}
           >
             {item.name}
-          </a>
+          </Link>
         ))}
       </AppShell.Navbar>
       <AppShell.Main className=" bg-gradient-to-br from-gray-900 to-gray-800">

@@ -31,7 +31,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="navbar w-full border-b border-white/70 shadow-slate-800 shadow-lg">
+      <div className="navbar max-h-12 w-full border-b border-white/70 shadow-slate-800 shadow-lg">
         <div className="flex justify-end gap-4 mr-[1rem] py-2 items-center">
           {/* Notification bell and profile button */}
           <Tooltip label="Notifications" position="left" color="dark" withArrow>

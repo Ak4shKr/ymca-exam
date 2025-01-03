@@ -10,7 +10,7 @@ import { useState } from "react";
 import service from "../httpd/service";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
-import { redirect } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { useLoaderStore } from "../store/loaderState";
 
 const Register = () => {
@@ -184,12 +184,12 @@ const Register = () => {
             </Button>
             <p className="text-white text-sm">
               Already have an Account?{" "}
-              <a
+              <Link
                 className="text-green-700 font-semibold hover:text-green-600"
-                href="/login"
+                to="/login"
               >
                 LogIn
-              </a>
+              </Link>
             </p>
           </div>
         </form>
