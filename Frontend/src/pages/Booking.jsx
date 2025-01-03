@@ -244,7 +244,7 @@ export const Booking = () => {
           </div>
           {/* subject input */}
           <div className="w-full md:w-1/2 md:px-4 mt-4">
-            <Input.Wrapper label="Subject" description="" error="">
+            <Input.Wrapper label="Subject" description="" error="" size="xs">
               <Input
                 required
                 placeholder="Subject Input"
