@@ -5,7 +5,9 @@ import {
   deleteRoom,
   getAllProfessors,
   getAllRooms,
+  getReports,
   updateProfessor,
+  updateReport,
   updateRoom,
 } from "../Controllers/AdminController/AdminController.js";
 const router = express.Router();
@@ -18,5 +20,7 @@ router.post("/create-room", createRoom);
 router.delete("/delete-room", deleteRoom);
 router.put("/update-room", updateRoom);
 router.get("/all-rooms", getAllRooms);
+router.get("/all-reports", getReports);
+router.put("/update-reports", updateReport);
 
 export default router;

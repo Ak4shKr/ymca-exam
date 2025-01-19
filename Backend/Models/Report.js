@@ -14,6 +14,14 @@ const reportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  seen: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Report = mongoose.model("Report", reportSchema);

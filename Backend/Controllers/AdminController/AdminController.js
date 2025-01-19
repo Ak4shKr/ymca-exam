@@ -1,3 +1,4 @@
+import Report from "../../Models/Report.js";
 import Room from "../../Models/RoomModel.js";
 import User from "../../Models/UserModel.js";
 
@@ -89,6 +90,41 @@ export const updateProfessor = async (req, res) => {
     professor.isVerified = status;
     await professor.save();
     res.status(200).json({ message: "Professor updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getReports = async (req, res) => {
+  try {
+    const { status } = req.query;
+
+    const filter = {};
+    if (status === "true" || status === "false") {
+      filter.seen = status === "true";
+    }
+    const allReports = await Report.find(filter);
+    res
+      .status(200)
+      .json({ data: allReports, message: `All reports with status ${status}` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const updateReport = async (req, res) => {
+  try {
+    const { reportId, status } = req.query;
+    if (!reportId) {
+      return res.status(400).json({ message: "Please provide report." });
+    }
+    const report = await Report.findById(reportId);
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+    report.seen = status;
+    await report.save();
+    res.status(200).json({ message: "Report updated successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

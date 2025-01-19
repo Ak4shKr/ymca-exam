@@ -14,6 +14,11 @@ const navItem = [
     name: "Professors",
     path: "/dashboard/professors",
   },
+  {
+    id: 3,
+    name: "Feedbacks",
+    path: "/dashboard/feedbacks",
+  },
 ];
 
 export const CollapseDesktop = ({ children }) => {
