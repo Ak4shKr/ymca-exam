@@ -9,6 +9,7 @@ import Hero from "./pages/Hero";
 import { RoomManage } from "./Admin/RoomManage";
 import { ProfManage } from "./Admin/ProfManage";
 import { ProtectedAdmin } from "./components/routes/ProtectedAdmin";
+import { Feedback } from "./Admin/FeedbackManage";
 
 const App = () => {
   return (
@@ -60,6 +61,14 @@ const App = () => {
             element={
               <ProtectedAdmin>
                 <ProfManage />
+              </ProtectedAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/feedbacks"
+            element={
+              <ProtectedAdmin>
+                <Feedback />
               </ProtectedAdmin>
             }
           />
