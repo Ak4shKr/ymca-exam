@@ -40,7 +40,7 @@ export const Navbar = () => {
           <Tooltip label="Admin" position="left" color="dark" withArrow>
             <button
               onClick={handleAdminClick}
-              className="font-expo text-white/90 text-sm p-[2px] px-2 border border-white/80  rounded-md hover:text-[#F0185C]"
+              className="font-exo text-white/90 text-sm p-[2px] px-2 border border-white/80  rounded-md hover:text-[#F0185C]"
             >
               Admin
             </button>
