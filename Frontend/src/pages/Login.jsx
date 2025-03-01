@@ -44,7 +44,7 @@ export const Login = () => {
         setToken(response.data.token);
         setUser(response.data.user);
 
-        navigate("/"); // Navigate to home page smoothly
+       navigate("/", { replace: true });
       }
     } catch (error) {
       console.error(error);
