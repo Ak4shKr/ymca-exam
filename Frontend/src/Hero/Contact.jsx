@@ -105,9 +105,10 @@ export const Contact = () => {
               color="indigo"
               type="submit"
               size="xs"
+              loading={loading}
               className="w-full mt-8 py-1 text-md font-semibold hover:bg-indigo-700 transition duration-300"
             >
-              {loading ? "Reporting..." : "Report"}
+             Report
             </Button>
           </form>
         </div>
