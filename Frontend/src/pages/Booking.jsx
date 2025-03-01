@@ -259,6 +259,7 @@ export const Booking = () => {
             <DateInput
               value={inputdate}
               size="xs"
+              minDate={new Date()}
               onChange={(date) => setInputDate(date)}
               label="Choose a Date"
               placeholder="Exam Date"
