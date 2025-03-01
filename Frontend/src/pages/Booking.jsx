@@ -9,23 +9,6 @@ import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../store/authState";
 import { useLoaderStore } from "../store/loaderState";
 
-// interface Slot {
-//   slot: string;
-//   availableSeats: number;
-// }
-
-// interface Room {
-//   id: string;
-//   room: string;
-//   totalSeats: number;
-//   slots: Slot[];
-// }
-
-// interface BookingRoom {
-//   room: string;
-//   seats: number;
-// }
-
 const RoomCard = ({ availableRooms }) => {
   return (
     <Box className="flex flex-wrap justify-center items-center gap-4 p-2">

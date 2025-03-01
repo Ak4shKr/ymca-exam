@@ -25,7 +25,7 @@ const BookingSchema = new mongoose.Schema({
   rooms: [
     {
       room: {
-        type: mongoose.Schema.Types.ObjectId, // Ensure it's an ObjectId if referencing Room model
+        type: mongoose.Schema.Types.ObjectId, // Ensure it's an ObjectId 
         ref: "Room",
         required: true,
       },
@@ -42,7 +42,7 @@ const BookingSchema = new mongoose.Schema({
   professor: [
     {
       professorId: {
-        type: mongoose.Schema.Types.ObjectId, // Ensure it's an ObjectId if referencing User model
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
       },
