@@ -101,9 +101,10 @@ export const Login = () => {
               size="sm"
               type="submit"
               color="indigo"
+              loading={loading}
               mt="sm"
             >
-              {loading ? "Logging in..." : "Login"}
+              Login
             </Button>
             <p className="text-white text-sm">
               Don&apos;t have an Account?{" "}
