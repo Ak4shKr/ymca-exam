@@ -12,9 +12,9 @@ export const Register = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    if (!validateEmail(email)) {
-      return res.status(400).json({ error: "Please use jcboseust email only" });
-    }
+    // if (!validateEmail(email)) {
+    //   return res.status(400).json({ error: "Please use jcboseust email only" });
+    // }
 
     // Check if the user already exists
     const lowerCaseEmail = email.toLowerCase();
