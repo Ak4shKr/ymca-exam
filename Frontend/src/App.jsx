@@ -10,6 +10,7 @@ import { RoomManage } from "./Admin/RoomManage";
 import { ProfManage } from "./Admin/ProfManage";
 import { ProtectedAdmin } from "./components/routes/ProtectedAdmin";
 import { Feedback } from "./Admin/FeedbackManage";
+import NotFound from "./pages/404";
 
 const App = () => {
   return (
@@ -74,6 +75,7 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>
