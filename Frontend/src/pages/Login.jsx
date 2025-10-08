@@ -5,6 +5,7 @@ import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "../store/authState";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoaderStore } from "../store/loaderState";
+import { FaGoogle } from "react-icons/fa";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,16 @@ export const Login = () => {
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
+
+  const handleGoogleLogin = () => {
+    const clientId = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
+    // const clientSecret = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_SECRET;
+    const redirectUri = "http://localhost:5173/google-auth/callback";
+
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=openid%20email%20profile&access_type=offline`;
+
+    window.location.href = googleAuthUrl;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,6 +115,17 @@ export const Login = () => {
               mt="sm"
             >
               {loading ? "Logging in..." : "Login"}
+            </Button>
+            <Button
+              w="100%"
+              mb="sm"
+              size="sm"
+              color="indigo"
+              mt="sm"
+              onClick={handleGoogleLogin}
+            >
+              <FaGoogle className="mr-2 text-red-500" />
+              Login with Google
             </Button>
             <p className="text-white text-sm">
               Don&apos;t have an Account?{" "}

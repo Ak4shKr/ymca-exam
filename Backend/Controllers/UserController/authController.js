@@ -4,6 +4,7 @@ import { otpGenerate } from "../../utills/otpGenerate.js";
 import { sendEmail } from "../../utills/emailService.js";
 import { generateToken } from "../../utills/generateToken.js";
 import { validateEmail } from "../../utills/validateEmail.js";
+import axios from "axios";
 
 export const Register = async (req, res) => {
   try {
@@ -123,5 +124,24 @@ export const Login = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { access_token } = req.body;
+    if (!access_token) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    const userRes = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      { headers: { Authorization: `Bearer ${access_token}` } }
+    );
+    console.log("userRes", userRes.data);
+    return res
+      .status(200)
+      .json({ message: "Google login successful", user: userRes.data });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };
