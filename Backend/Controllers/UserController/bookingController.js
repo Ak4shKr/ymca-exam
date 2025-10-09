@@ -496,7 +496,6 @@ export const bookingByProfessor = async (req, res) => {
   try {
     const { professorId } = req.params;
     const professor = await User.findById(professorId);
-    console.log(professor);
     if (!professorId) {
       return res.status(400).json({ error: "Professor ID is required" });
     }
@@ -520,7 +519,6 @@ export const addProfessor = async (req, res) => {
     }
 
     const booking = await Booking.findById(bookingId);
-    console.log("booking details", booking);
     if (!booking) {
       return res.status(400).json({ error: "Booking not found" });
     }

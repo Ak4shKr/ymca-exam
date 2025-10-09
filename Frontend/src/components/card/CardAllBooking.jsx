@@ -18,10 +18,11 @@ import { useLoaderStore } from "../../store/loaderState";
 
 export const CardAllBooking = () => {
   const setLoading = useLoaderStore((state) => state.setLoading);
-
   const { getUser } = useAuthStore();
   const user = getUser();
+
   const [responsedata, setResponsedata] = useState([]);
+
   const getBooking = async () => {
     setLoading(true);
     try {
@@ -49,10 +50,8 @@ export const CardAllBooking = () => {
       children: <Text size="sm">Are you sure, want to Add into Room?</Text>,
       labels: { confirm: "Yes, do", cancel: "No, don't " },
       confirmProps: { color: "#2bdd66" },
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => {
-        handleAddProfessor(bookingId);
-      },
+      onCancel: () => {},
+      onConfirm: () => handleAddProfessor(bookingId),
     });
   };
 
@@ -84,7 +83,6 @@ export const CardAllBooking = () => {
         });
       }
     } catch (error) {
-      console.log(error.response.data.error);
       notifications.show({
         title: "Failed",
         message: error.response.data.error,
@@ -98,6 +96,7 @@ export const CardAllBooking = () => {
   useEffect(() => {
     getBooking();
   }, []);
+
   return (
     <Layout>
       <SimpleGrid

@@ -11,6 +11,7 @@ import { ProfManage } from "./Admin/ProfManage";
 import { ProtectedAdmin } from "./components/routes/ProtectedAdmin";
 import { Feedback } from "./Admin/FeedbackManage";
 import NotFound from "./pages/404";
+import GoogleAuthCallbackPage from "./components/common/Auth/GoogleAuth";
 
 const App = () => {
   return (
@@ -76,6 +77,10 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
+          <Route
+            path="/google-auth/callback"
+            element={<GoogleAuthCallbackPage />}
+          />
         </Routes>
       </Router>
     </div>

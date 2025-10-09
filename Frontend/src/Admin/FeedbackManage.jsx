@@ -15,6 +15,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import service from "../httpd/service";
 import { useLoaderStore } from "../store/loaderState";
 import { notifications } from "@mantine/notifications";
@@ -29,7 +30,6 @@ export const Feedback = () => {
       const response = await service.get(`/all-reports?status=${status}`);
       setReports(response.data.data);
       setloading(false);
-      console.log(response.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -160,7 +160,6 @@ export const Feedback = () => {
     </CollapseDesktop>
   );
 };
-
 const ReportCard = ({ report, updateReport }) => {
   const { _id, name, email, comment, seen, createdAt } = report;
   return (
@@ -212,4 +211,16 @@ const ReportCard = ({ report, updateReport }) => {
       </Text>
     </Card>
   );
+};
+
+ReportCard.propTypes = {
+  report: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    comment: PropTypes.string.isRequired,
+    seen: PropTypes.bool.isRequired,
+    createdAt: PropTypes.string.isRequired,
+  }).isRequired,
+  updateReport: PropTypes.func.isRequired,
 };

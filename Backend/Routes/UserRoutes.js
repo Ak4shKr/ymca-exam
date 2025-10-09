@@ -14,6 +14,7 @@ import {
   Login,
   Register,
   verifyOTP,
+  googleLogin,
 } from "../Controllers/UserController/authController.js";
 import { reportFeedback } from "../Controllers/UserController/otherController.js";
 
@@ -23,6 +24,7 @@ const router = express.Router();
 router.post("/register", Register);
 router.post("/verify-otp", verifyOTP);
 router.post("/login", Login);
+router.post("/google-login", googleLogin);
 
 //professor routes
 router.post("/available-rooms", getAvailableRoomsByDate);

@@ -67,7 +67,6 @@ export const RoomManage = () => {
     }
   };
   const handleEditRoom = ({ roomId }) => {
-    console.log(roomId);
     const selectedRoom = rooms.find((room) => room._id === roomId);
     if (selectedRoom) {
       setEditRoom(selectedRoom.number);
@@ -117,7 +116,7 @@ export const RoomManage = () => {
       children: <Text size="sm">Are you sure, want to Delete this Room?</Text>,
       labels: { confirm: "Yes, do", cancel: "No, don't " },
       confirmProps: { color: "#F0185C" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => {
         handleDeleteRoom(roomId);
       },
@@ -134,11 +133,6 @@ export const RoomManage = () => {
       });
       return;
     }
-    // const Confirm = window.confirm(
-    //   "Are you sure you want to delete this room?"
-    // );
-    // if (!Confirm) return;
-    // console.log(typeof selectedRoom.number);
     setloading(true);
     try {
       const response = await service.delete("/delete-room", {

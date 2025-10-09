@@ -70,10 +70,6 @@ export const Booking = () => {
         branch,
         semester,
       });
-      console.log(
-        "Available Rooms API Response:",
-        response.data.availableRooms
-      );
       if (response.status === 200) {
         notifications.show({
           title: "Success",
@@ -171,8 +167,7 @@ export const Booking = () => {
       }))
       .filter((room) => room.slots.length > 0);
     setFilteredRooms(filtered);
-    setSelectedRooms([]); // Clear selected rooms when changing slots
-    // console.log("Filtered Rooms:", filtered);
+    setSelectedRooms([]); 
   }, [slot, availableRooms]);
 
   useEffect(() => {

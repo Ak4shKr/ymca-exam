@@ -67,7 +67,7 @@ export const ProfManage = () => {
       ),
       labels: { confirm: "Yes, do", cancel: "No, don't " },
       confirmProps: { color: "#F0185C" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => {
         handleBlock(professorId, action);
       },

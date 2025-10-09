@@ -20,7 +20,6 @@ export const sendEmail = async ({ email, subject, html }) => {
       subject: subject,
       html: html,
     });
-    // console.log("Email sent");
     return { message: "Email sent successfully", status: 200 };
   } catch (error) {
     return { error: error.message, status: 500 };

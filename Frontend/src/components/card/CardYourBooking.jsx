@@ -29,7 +29,7 @@ export const CardYourBooking = () => {
       children: <Text size="sm">Are you sure, want to left Room?</Text>,
       labels: { confirm: "Yes, do", cancel: "No, don't " },
       confirmProps: { color: "#F0185C" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => {
         handleRemoveProfessor(bookingId);
       },
@@ -67,7 +67,6 @@ export const CardYourBooking = () => {
     try {
       const response = await service.get(`/booking-professor/${professorId}`);
       setResponsedata(response.data.bookings);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     } finally {
