@@ -10,6 +10,7 @@ const GoogleAuthCallbackPage = () => {
 
   const clientId = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_SECRET;
+  const redirectUri = import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL_PROD;
   const navigate = useNavigate();
   useEffect(() => {
     const fetchToken = async () => {
@@ -22,7 +23,7 @@ const GoogleAuthCallbackPage = () => {
             code,
             client_id: clientId,
             client_secret: clientSecret,
-            redirect_uri: `http://localhost:5173/google-auth/callback`,
+            redirect_uri: redirectUri,
           })
         );
 
