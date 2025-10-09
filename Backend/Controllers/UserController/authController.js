@@ -131,7 +131,7 @@ export const googleLogin = async (req, res) => {
     if (!access_token) {
       return res.status(400).json({ error: "All fields are required" });
     }
-    const userRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
@@ -145,7 +145,7 @@ export const googleLogin = async (req, res) => {
 
     const userData = await response.json();
 
-    const { name, email, picture, sub } = userRes;
+    const { name, email, picture, sub } = userData;
 
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
