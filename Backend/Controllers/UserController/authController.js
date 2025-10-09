@@ -137,6 +137,14 @@ export const googleLogin = async (req, res) => {
       },
     });
 
+
+    if (!response.ok) {
+      const text = await response.text();
+      return res.status(500).json({ error: `Failed to fetch Google user info: ${text}` });
+    }
+
+    const userData = await response.json();
+
     const { name, email, picture, sub } = userRes;
 
     const existingUser = await User.findOne({ email: email });
@@ -152,7 +160,7 @@ export const googleLogin = async (req, res) => {
     const user = new User({
       name: name,
       email: email,
-      picture: picture,
+      avatar: picture,
       googleId: sub,
       isVerified: true,
     });
