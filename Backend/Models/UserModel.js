@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ["male", "female"],
   },
+  isAdmin: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
