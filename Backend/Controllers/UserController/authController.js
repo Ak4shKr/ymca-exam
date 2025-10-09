@@ -137,7 +137,7 @@ export const googleLogin = async (req, res) => {
       },
     });
 
-    const { name, email, picture, sub } = userRes.data;
+    const { name, email, picture, sub } = userRes;
 
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
