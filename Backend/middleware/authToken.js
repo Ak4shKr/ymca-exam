@@ -11,7 +11,6 @@ export const authToken = (req, res, next) => {
           .send({ success: false, message: "Failed to authenticate user." });
       } else {
         req.user = decoded;
-        console.log(decoded);
         next();
       }
     });

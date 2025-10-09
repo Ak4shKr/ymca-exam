@@ -24,7 +24,6 @@ export const Features = () => {
           {featuresData.map((feature, index) => (
             <Card
               key={index}
-              whileHover={{ scale: 1.05 }}
               shadow="sm"
               radius="md"
               withBorder

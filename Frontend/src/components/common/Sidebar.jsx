@@ -38,7 +38,7 @@ export const Sidebar = () => {
       ),
       labels: { confirm: "Logout", cancel: "No don't leave it" },
       confirmProps: { color: "#F0185C" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => {
         logoutUser();
       },

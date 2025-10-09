@@ -8,10 +8,17 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
-    required: true,
+  },
+  googleId: {
+    type: String,
+    unique: true,
+  },
+  avatar: {
+    type: String,
   },
   department: {
     type: String,
@@ -21,7 +28,7 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["admin", "user"],
-    default: "user",
+    default: "admin",
   },
   isVerified: {
     type: Boolean,

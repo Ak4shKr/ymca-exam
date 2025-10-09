@@ -26,7 +26,6 @@ export const Contact = () => {
     try {
       setLoading(true);
       const response = await service.post("/report", formData);
-      // console.log(response.data);
       if (response.status === 200) {
         notifications.show({
           title: "Reported",

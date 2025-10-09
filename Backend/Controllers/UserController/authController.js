@@ -51,7 +51,6 @@ export const Register = async (req, res) => {
     `,
     };
     const sendEmailStatus = await sendEmail(emailData);
-    // console.log("email status", sendEmailStatus.status);
     if (sendEmailStatus.status !== 200) {
       return res.status(500).json({ error: "Email sending failed" });
     }
@@ -137,10 +136,35 @@ export const googleLogin = async (req, res) => {
       "https://www.googleapis.com/oauth2/v3/userinfo",
       { headers: { Authorization: `Bearer ${access_token}` } }
     );
-    console.log("userRes", userRes.data);
-    return res
-      .status(200)
-      .json({ message: "Google login successful", user: userRes.data });
+
+    const { name, email, picture, sub } = userRes.data;
+
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      const token = generateToken(existingUser._id);
+      return res.status(200).json({
+        message: "User logged in successfully",
+        token: token,
+        user: existingUser,
+      });
+    }
+
+    const user = new User({
+      name: name,
+      email: email,
+      picture: picture,
+      googleId: sub,
+      isVerified: true,
+    });
+
+    await user.save();
+
+    const token = generateToken(user._id);
+    res.status(200).json({
+      message: "User logged in successfully",
+      token: token,
+      user: user,
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

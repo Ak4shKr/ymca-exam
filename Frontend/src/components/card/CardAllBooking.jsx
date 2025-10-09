@@ -98,7 +98,7 @@ export const CardAllBooking = () => {
       children: <Text size="sm">Are you sure, want to Add into Room?</Text>,
       labels: { confirm: "Yes, do", cancel: "No, don't " },
       confirmProps: { color: "#2bdd66" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => handleAddProfessor(bookingId),
     });
   };
