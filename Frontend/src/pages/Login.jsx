@@ -55,7 +55,7 @@ export const Login = () => {
         setToken(response.data.token);
         setUser(response.data.user);
 
-        navigate("/"); // Navigate to home page smoothly
+       navigate("/", { replace: true });
       }
     } catch (error) {
       console.error(error);
@@ -112,9 +112,10 @@ export const Login = () => {
               size="sm"
               type="submit"
               color="indigo"
+              loading={loading}
               mt="sm"
             >
-              {loading ? "Logging in..." : "Login"}
+              Login
             </Button>
             <Button
               w="100%"
