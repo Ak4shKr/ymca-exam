@@ -47,6 +47,7 @@ const GoogleAuthCallbackPage = () => {
   return (
     <div className="p-4 text-center text-white font-semibold text-xs">
       <h1>Google Auth Callback Page</h1>
+      <h1>Loading..... it may take few seconds, please wait :)</h1>
     </div>
   );
 };
